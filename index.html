@@ -191,6 +191,7 @@ body { margin: 0; background: var(--color-bg); color: var(--color-fg); font-fami
 .cz-group span { font-weight: 400; }
 .cz-group-desc { grid-column: 1 / -1; margin: calc(-1 * var(--cds-gap-sm)) 0 0; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
 .cz-falta-sw, .cz-fill i.falta { background: repeating-linear-gradient(135deg, var(--color-bad) 0 2px, transparent 2px 5px) !important; box-shadow: inset 0 0 0 1px var(--color-bad); }
+.cz-tag { display: inline-block; vertical-align: 2px; margin-left: 2px; padding: 0 .4rem; border: 1px solid var(--color-border-line); border-radius: 999px; font-size: 11px; font-weight: 500; line-height: 1.5; color: var(--color-fg-muted); white-space: nowrap; }
 .cz-dot:not(.ok):not(.bad) { background: var(--cds-chart-muted); }
 .cz-sub { display: flex; align-items: center; gap: .4rem; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
 .cz-table tr.click { cursor: pointer; }
@@ -446,16 +447,16 @@ window.__CZ_DATA.oferta = [{"chave":"ZO398","nome":"ZO398 Anatomia Comparada","t
 <script>
 const VISITANTES = ['Bárbara Moraes'];
 const VINCULOS = [
-  { key: 'permanente', label: 'Corpo permanente', filtro: 'Permanente' },
-  { key: 'visitante', label: 'Professor visitante', filtro: 'Visitante' },
-  { key: 'substituto', label: 'Professores substitutos', filtro: 'Substitutos' },
-  { key: 'posdoc', label: 'Pós-docs', filtro: 'Pós-docs' },
+  { key: 'permanente', label: 'Corpo permanente', filtro: 'Permanente', abrev: 'Perm.' },
+  { key: 'visitante', label: 'Professor visitante', filtro: 'Visitante', abrev: 'Visit.' },
+  { key: 'substituto', label: 'Professores substitutos', filtro: 'Substitutos', abrev: 'Subst.' },
+  { key: 'posdoc', label: 'Pós-docs', filtro: 'Pós-docs', abrev: 'Pós-doc' },
 ];
 
 const GRUPOS_COD = [
   { key: 'ZO', filtro: 'ZO', label: 'ZO · Exclusivas da Zoologia', desc: 'A Zoologia responde por 100% da carga horária.' },
   { key: 'INT', filtro: 'INT', label: 'INT · Interdepartamentais', desc: 'A Zoologia cobre a sua parte; o restante é de outros departamentos.' },
-  { key: 'BCA', filtro: 'BCA', label: 'BCA · Disciplinas do curso de bacharelado', desc: 'Disciplinas próprias do curso; a parte da Zoologia está indicada em cada uma.' },
+  { key: 'BCA', filtro: 'BCA', label: 'BCA · Bacharelado em Ciências Ambientais', desc: 'Disciplinas próprias do curso; a parte da Zoologia está indicada em cada uma.' },
   { key: 'BO', filtro: 'BO', label: 'BO · Botânica', desc: 'Disciplina da Botânica com colaboração de docente da Zoologia.' },
   { key: 'POS', filtro: 'Pós', label: 'Pós-graduação', desc: 'Programas de pós-graduação, sem cota fixa da Zoologia.' },
 ];
@@ -630,20 +631,19 @@ dash.calc('por_disciplina', {
     const scaleMax = Math.max(...rows.map((r) => Math.max(r.total, r.min_total))) * 1.04;
     grid.replaceChildren();
     if (!list.length) { grid.append(el('p', 'cz-empty', 'Nenhum docente neste filtro.')); return; }
-    const ordenada = VINCULOS.flatMap((v) => list.filter((r) => r.vinculo === v.key));
-    let grupo = null;
-    for (const r of ordenada) {
-      if (r.vinculo !== grupo) {
-        grupo = r.vinculo;
-        const n = list.filter((x) => x.vinculo === grupo).length;
-        const h = el('h3', 'cz-group'); h.append(VINCULOS.find((v) => v.key === grupo).label, el('span', null, ` · ${n}`));
-        grid.append(h);
-      }
+    if (vfiltro !== 'todos') {
+      const h = el('h3', 'cz-group'); h.append(VINCULOS.find((v) => v.key === vfiltro).label, el('span', null, ` · ${list.length}`));
+      grid.append(h);
+    }
+    for (const r of list) {
       const w = 'docente=' + enc(r.docente);
       const card = el('button', 'cz-card'); card.type = 'button';
       card.setAttribute('aria-label', `Abrir painel de ${r.docente}`);
       const top = el('div', 'cz-card-top');
-      const who = el('div'); who.append(mark(el('div', 'cz-name', r.docente), 'resumo', 'docente', w), mark(el('div', 'cz-role', r.papel), 'resumo', 'papel', w));
+      const nome = mark(el('div', 'cz-name', r.docente), 'resumo', 'docente', w);
+      const vin = VINCULOS.find((v) => v.key === r.vinculo);
+      const tag = el('span', 'cz-tag', vin.abrev); tag.title = vin.label; nome.append(' ', tag);
+      const who = el('div'); who.append(nome, mark(el('div', 'cz-role', r.papel), 'resumo', 'papel', w));
       const big = el('div', 'cz-big'); big.append(mark(el('span', null, String(r.total)), 'resumo', 'total', w), el('small', null, 'h'));
       top.append(who, big);
       const bar = stacked(TIPOS.map((t) => ({ ...t, v: r[t.key] })), scaleMax, r.min_total, null, false, w);
@@ -852,12 +852,13 @@ dash.calc('por_disciplina', {
       .filter((r) => cfiltro === 'todos' || r.grupo === cfiltro)
       .sort((a, b) => a.chave.localeCompare(b.chave, 'pt', { numeric: true }));
     grid.replaceChildren();
-    for (const g of GRUPOS_COD) {
-      const doGrupo = list.filter((r) => r.grupo === g.key);
-      if (!doGrupo.length) continue;
-      const h = el('h3', 'cz-group'); h.append(g.label, el('span', null, ` · ${doGrupo.length}`));
+    if (cfiltro !== 'todos' && list.length) {
+      const g = GRUPOS_COD.find((x) => x.key === cfiltro);
+      const h = el('h3', 'cz-group'); h.append(g.label, el('span', null, ` · ${list.length}`));
       grid.append(h, el('p', 'cz-group-desc', g.desc));
-      for (const r of doGrupo) {
+    }
+    {
+      for (const r of list) {
         const card = el('button', 'cz-card'); card.type = 'button';
         card.setAttribute('aria-label', `Abrir painel de ${r.disciplina}`);
         const top = el('div', 'cz-card-top');
