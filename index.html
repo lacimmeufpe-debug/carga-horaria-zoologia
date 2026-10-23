@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Carga Horária Zoologia 2027.1</title>
-<meta name="description" content="Carga horária docente e disciplinas do Departamento de Zoologia (UFPE) no semestre 2027.1.">
+<meta name="description" content="Carga horária docente do Departamento de Zoologia (UFPE) no semestre 2027.1.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
@@ -52,10 +52,6 @@ body { margin: 0; background: var(--color-bg); color: var(--color-fg); font-fami
 @media (min-width: 40rem) { #dash-root { padding-inline: clamp(1rem, 3vw, 2.5rem); } }
 .site-foot { max-width: 78rem; margin: 2.5rem auto 0; font-size: .75rem; color: var(--color-fg-muted); border-top: 1px solid var(--color-border-line); padding-top: 1rem; }
 .dash-skeleton:empty::after { content: '—'; }
-.cz-tabs { display: flex; gap: var(--cds-gap-sm); margin-bottom: var(--cds-gap-lg); border-bottom: 1px solid var(--color-border-line); }
-.cz-tabs button { all: unset; cursor: pointer; padding: .75rem 1rem; font-size: var(--cds-font-size-body); color: var(--color-fg-muted); border-bottom: 2px solid transparent; transition: all .2s; }
-.cz-tabs button[aria-selected="true"] { color: var(--color-fg); border-bottom-color: var(--color-fg); font-weight: 600; }
-.cz-tabs button:hover { color: var(--color-fg); }
 </style>
 </head>
 <body>
@@ -96,6 +92,7 @@ body { margin: 0; background: var(--color-bg); color: var(--color-fg); font-fami
 .cz-dot { width: .5rem; height: .5rem; border-radius: 50%; flex: none; }
 .cz-dot.ok { background: var(--color-ok); } .cz-dot.bad { background: var(--color-bad); }
 .cz-status .ok { color: var(--color-ok); } .cz-status .bad { color: var(--color-bad); }
+/* stacked meter */
 .cz-track { position: relative; height: 10px; border-radius: 999px; background: var(--cds-chart-grid); }
 .cz-track.lg { height: 18px; }
 .cz-fill { position: absolute; inset: 0 auto 0 0; display: flex; border-radius: 999px; overflow: hidden; }
@@ -103,14 +100,15 @@ body { margin: 0; background: var(--color-bg); color: var(--color-fg); font-fami
 .cz-mark { position: absolute; top: -4px; bottom: -4px; width: 2px; background: var(--color-fg); border-radius: 1px; }
 .cz-track.lg .cz-mark { top: -6px; bottom: -6px; }
 .cz-mark span { position: absolute; top: calc(100% + 3px); left: 50%; transform: translateX(-50%); font-size: 11px; color: var(--color-fg-muted); white-space: nowrap; }
+/* docente view */
 .cz-back { all: unset; cursor: pointer; display: inline-flex; align-items: center; gap: .4rem; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); padding: .35rem .7rem; border-radius: 999px; border: 1px solid var(--color-border-line); margin-bottom: var(--cds-gap-md); }
 .cz-back:hover { color: var(--color-fg); border-color: var(--color-fg-muted); }
 .cz-prof { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: var(--cds-gap-md); margin-bottom: var(--cds-gap-lg); }
 .cz-prof h2 { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: clamp(1.9rem, 3.6vw, 2.8rem); line-height: 1.05; margin: 0; }
 .cz-chip { display: inline-flex; align-items: center; gap: .45rem; padding: .4rem .8rem; border-radius: 999px; font-size: var(--cds-font-size-caption); border: 1px solid var(--color-border-line); background: var(--color-panel); }
-.cz-chip.ok { color: var(--color-ok); }
-.cz-chip.bad { color: var(--color-bad); }
+.cz-chip.ok { color: var(--color-ok); } .cz-chip.bad { color: var(--color-bad); }
 .cz-prev { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); margin-top: var(--cds-gap-xs); text-align: right; }
+.cz-prev .up { color: var(--color-fg); } .cz-prev .down { color: var(--color-fg); }
 .cz-two { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); gap: var(--cds-gap-md); margin-bottom: var(--cds-gap-md); }
 .cz-h3 { font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); margin: 0; }
 .cz-note { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); margin: 2px 0 var(--cds-gap-md); }
@@ -122,224 +120,775 @@ body { margin: 0; background: var(--color-bg); color: var(--color-fg); font-fami
 .cz-rule-v { font-variant-numeric: tabular-nums; white-space: nowrap; }
 .cz-rule-v .n { font-family: var(--font-anthropic-serif); font-size: 1.6rem; }
 .cz-rule-v .of { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); }
+.cz-rule-s { font-size: var(--cds-font-size-caption); margin-left: .5rem; }
+.cz-rule-s.ok { color: var(--color-ok); } .cz-rule-s.bad { color: var(--color-bad); }
+.cz-donut-wrap { display: flex; flex-wrap: wrap; align-items: center; gap: var(--cds-gap-lg); }
+.cz-donut { width: 168px; height: 168px; flex: none; position: relative; }
+.cz-donut svg { display: block; }
+.cz-donut-c { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; pointer-events: none; }
+.cz-donut-c .n { font-family: var(--font-anthropic-serif); font-size: 2rem; line-height: 1; }
+.cz-donut-c .l { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); margin-top: 2px; }
+.cz-comp { flex: 1 1 12rem; display: grid; gap: var(--cds-gap-sm); min-width: 0; }
+.cz-comp-row { display: grid; grid-template-columns: auto 1fr auto auto; align-items: center; gap: var(--cds-gap-sm); font-size: var(--cds-font-size-body); }
+.cz-comp-row .h { font-variant-numeric: tabular-nums; text-align: right; }
+.cz-comp-row .p { font-variant-numeric: tabular-nums; color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); width: 3rem; text-align: right; }
+.cz-comp-row.zero { color: var(--color-fg-muted); }
+.cz-gradsplit { margin-top: var(--cds-gap-md); padding-top: var(--cds-gap-md); border-top: 1px solid var(--color-border-line); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.cz-curso { display: grid; grid-template-columns: minmax(6.5rem, 9rem) 1fr 3.2rem; align-items: center; gap: var(--cds-gap-sm); margin-bottom: var(--cds-gap-sm); font-size: var(--cds-font-size-body); }
+.cz-curso .lab { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cz-curso .v { text-align: right; font-variant-numeric: tabular-nums; }
+.cz-curso .cz-track { height: 14px; background: transparent; }
+.cz-table-wrap { overflow-x: auto; }
+.cz-table { width: 100%; border-collapse: collapse; font-size: var(--cds-font-size-body); }
+.cz-table th { text-align: left; font-weight: 500; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); padding: 0 var(--cds-pad-sm) var(--cds-pad-sm); border-bottom: 1px solid var(--color-border-line); white-space: nowrap; }
+.cz-table td { padding: .7rem var(--cds-pad-sm); border-bottom: 1px solid var(--color-border-line); vertical-align: middle; }
+.cz-table tr:last-child td { border-bottom: 0; }
+.cz-table .num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.cz-table .disc { min-width: 12rem; }
+.cz-pill { display: inline-flex; align-items: center; gap: .35rem; font-size: var(--cds-font-size-caption); white-space: nowrap; }
+.cz-warn { display: inline-block; margin-top: 3px; font-size: 11px; color: var(--color-bad); }
+.cz-rules-txt { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); gap: var(--cds-gap-md); font-size: var(--cds-font-size-body); }
+.cz-rules-txt div { padding-left: var(--cds-pad-md); border-left: 2px solid var(--color-border-line); }
+.cz-rules-txt b { display: block; margin-bottom: 2px; }
+.cz-rules-txt p { margin: 0; color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); }
 .cz-section { margin-bottom: var(--cds-gap-md); }
 .cz-tip { position: absolute; z-index: 5; pointer-events: none; background: var(--cds-surface-popover); border: 1px solid var(--cds-border); border-radius: var(--cds-radius); box-shadow: var(--cds-shadow-popover); padding: var(--cds-pad-xs) var(--cds-pad-sm); font-size: var(--cds-font-size-caption); white-space: nowrap; opacity: 0; transition: opacity .1s; }
 .cz-tip .t { color: var(--cds-text-secondary); }
 .cz-empty { color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); padding: var(--cds-pad-md) 0; }
-.cz-view { display: none; }
-.cz-view.active { display: block; }
-.cz-prof-distribution { display: grid; gap: var(--cds-gap-md); }
-.cz-prof-row { display: flex; align-items: center; gap: var(--cds-gap-md); }
-.cz-prof-name { font-weight: 500; min-width: 12rem; font-size: var(--cds-font-size-body); }
-.cz-prof-bar { flex: 1; display: flex; align-items: center; gap: var(--cds-gap-sm); }
-.cz-prof-ch { font-variant-numeric: tabular-nums; min-width: 3rem; text-align: right; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+[data-dash-source-state=empty] { color: transparent; }
+[data-dash-source-state=refreshing] { opacity: .5; transition: opacity var(--cds-dur-slow); }
 @media (prefers-reduced-motion: no-preference) {
   .cz-view.enter { animation: cz-in var(--cds-dur-slow) var(--cds-ease-out); }
   @keyframes cz-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 }
 @media (max-width: 34rem) {
-  .cz-prof-name { min-width: auto; }
+  .cz-prev { text-align: left; }
+  .cz-donut-wrap { justify-content: center; }
+  .cz-table .col-curso { display: none; }
+}
+/* paleta por docente (visão de disciplinas) */
+.cz { --p1: #3b6fb6; --p2: #d08a2e; --p3: #7a5bb5; --p4: #3f9a8a; --p5: #c2526b; --p6: #6f9a3a; --p7: #2a90b8; --p8: #a8642a; --p9: #b5579f; --p10: #5f6f86; --p11: #b8941f; --p12: #3f8a55; --p13: #d0674c; --p14: #8a76a8; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .cz { --p1: #7aa5e6; --p2: #e8a95a; --p3: #a78be0; --p4: #6cc4b2; --p5: #e88aa0; --p6: #9cc46a; --p7: #6cc0e0; --p8: #d69a62; --p9: #d98ac8; --p10: #9aa8bd; --p11: #e3c55a; --p12: #7cbf8e; --p13: #e89a84; --p14: #b9a0d0; }
+}
+:root[data-theme="dark"] .cz { --p1: #7aa5e6; --p2: #e8a95a; --p3: #a78be0; --p4: #6cc4b2; --p5: #e88aa0; --p6: #9cc46a; --p7: #6cc0e0; --p8: #d69a62; --p9: #d98ac8; --p10: #9aa8bd; --p11: #e3c55a; --p12: #7cbf8e; --p13: #e89a84; --p14: #b9a0d0; }
+.cz-tabs { display: inline-flex; border: 1px solid var(--color-border-line); border-radius: 999px; padding: 3px; background: var(--color-panel); margin-bottom: var(--cds-gap-lg); }
+.cz-tabs button { all: unset; cursor: pointer; font-size: var(--cds-font-size-body); padding: .45rem 1.1rem; border-radius: 999px; color: var(--color-fg-muted); }
+.cz-tabs button[aria-pressed="true"] { background: var(--color-fg); color: var(--color-bg); }
+.cz-tabs button:focus-visible, .cz-link:focus-visible { outline: 2px solid var(--color-fg); outline-offset: 2px; }
+.cz-fill.split i + i { border-left: 2px solid var(--color-panel); }
+.cz-meta { display: flex; flex-wrap: wrap; align-items: center; gap: .3rem .7rem; margin-top: 4px; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.cz-swatches { display: inline-flex; gap: 3px; flex: none; }
+.cz-swatches i { width: .55rem; height: .55rem; border-radius: 2px; display: block; }
+.cz-share { display: grid; gap: var(--cds-gap-sm); margin-top: var(--cds-gap-lg); }
+.cz-share-row { display: grid; grid-template-columns: auto minmax(7rem, 11rem) 1fr 3.2rem 3rem; align-items: center; gap: var(--cds-gap-sm); font-size: var(--cds-font-size-body); }
+.cz-share-row .h { font-variant-numeric: tabular-nums; text-align: right; }
+.cz-share-row .p { font-variant-numeric: tabular-nums; color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); text-align: right; }
+.cz-link { all: unset; cursor: pointer; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-decoration: underline; text-decoration-color: var(--color-border-line); text-underline-offset: 3px; }
+.cz-link:hover { text-decoration-color: var(--color-fg-muted); }
+.cz-table tr.click { cursor: pointer; }
+.cz-table tr.click:hover td { background: var(--cds-chart-grid); }
+@media (max-width: 34rem) {
+  .cz-share-row { grid-template-columns: auto 1fr auto auto; }
+  .cz-share-row .cz-track { grid-column: 1 / -1; order: 5; }
 }
 </style>
+
 <div class="cz" id="cz">
+  <nav class="cz-tabs" aria-label="Escolher visão">
+    <button type="button" data-aba="docentes" aria-pressed="true">Docentes</button>
+    <button type="button" data-aba="disciplinas" aria-pressed="false">Disciplinas</button>
+  </nav>
+  <!-- ========== VISÃO DO DEPARTAMENTO ========== -->
+  <section class="cz-view" id="departamento">
+    <header class="cz-head">
+      <div>
+        <p class="cz-eyebrow">Departamento de Zoologia · Centro de Biociências · UFPE</p>
+        <h1 class="cz-title" id="titulo">Carga horária docente · 2027.1</h1>
+        <p class="cz-take" id="resumo-dep">
+          <b data-source="departamento" data-field="cumprem" class="dash-skeleton">—</b> de
+          <b data-source="departamento" data-field="docentes" class="dash-skeleton">—</b> docentes cumprem as duas regras do semestre.
+          Clique em um nome para abrir o painel individual.
+        </p>
+      </div>
+      <div class="cz-legend" aria-label="Legenda">
+        <span><i class="cz-sw" style="background:var(--c-obr)"></i>Obrigatórias</span>
+        <span><i class="cz-sw" style="background:var(--c-ele)"></i>Eletivas</span>
+        <span><i class="cz-sw" style="background:var(--c-pos)"></i>Pós-graduação</span>
+        <span><i class="cz-sw line"></i>Mínimo total</span>
+      </div>
+    </header>
 
-<!-- ABAS PRINCIPAIS -->
-<div class="cz-head">
-  <div>
-    <p class="cz-eyebrow">Departamento de Zoologia · Centro de Biociências · UFPE</p>
-    <h1 class="cz-title">Carga horária · 2027.1</h1>
-  </div>
-</div>
-
-<div class="cz-tabs" role="tablist">
-  <button role="tab" aria-selected="true" aria-controls="docentes-view" id="tab-docentes">
-    Docentes
-  </button>
-  <button role="tab" aria-selected="false" aria-controls="disciplinas-view" id="tab-disciplinas">
-    Disciplinas
-  </button>
-</div>
-
-<!-- ========== VISÃO DE DOCENTES ========== -->
-<section class="cz-view active" id="docentes-view" role="tabpanel">
-<div>
-  <p class="cz-take" id="resumo-dep">
-    <b data-source="departamento" data-field="cumprem" class="dash-skeleton">—</b> de <b data-source="departamento" data-field="docentes" class="dash-skeleton">—</b> docentes cumprem as duas regras do semestre. Clique em um nome para abrir o painel individual.
-  </p>
-</div>
-<div class="cz-legend" aria-label="Legenda">
-  <span><i class="cz-sw" style="background:var(--c1)"></i>Obrigatórias</span>
-  <span><i class="cz-sw" style="background:var(--c2)"></i>Eletivas</span>
-  <span><i class="cz-sw" style="background:var(--c3)"></i>Pós-graduação</span>
-  <span><i class="cz-sw line"></i>Mínimo total</span>
-</div>
-
-<div class="cz-tiles" id="tiles">
-  <div class="cz-tile"><div class="cz-tile-l">Docentes no semestre</div><div class="cz-tile-v dash-skeleton" data-source="departamento" data-field="docentes">—</div><div class="cz-tile-n">efetivos, substitutos e pós-docs</div></div>
-  <div class="cz-tile"><div class="cz-tile-l">Cumprem as duas regras</div><div class="cz-tile-v ok dash-skeleton" data-source="departamento" data-field="cumprem">—</div><div class="cz-tile-n">mínimo em obrigatórias e mínimo total</div></div>
-  <div class="cz-tile"><div class="cz-tile-l">Abaixo de algum mínimo</div><div class="cz-tile-v bad dash-skeleton" data-source="departamento" data-field="abaixo">—</div><div class="cz-tile-n">ver docentes em vermelho</div></div>
-  <div class="cz-tile"><div class="cz-tile-l">CH total do departamento</div><div class="cz-tile-v dash-skeleton" data-source="departamento" data-field="ch_total">—</div><div class="cz-tile-n">horas em 2027.1, graduação + pós</div></div>
-</div>
-
-<div class="cz-bar-row">
-  <h2 class="cz-h3" id="lista-docentes">Docentes</h2>
-  <div class="cz-seg" role="group" aria-label="Filtrar docentes">
-    <button type="button" data-filtro="todos" aria-pressed="true">Todos</button>
-    <button type="button" data-filtro="abaixo" aria-pressed="false">Abaixo do mínimo</button>
-  </div>
-</div>
-<div class="cz-grid" id="grid" data-source="resumo"></div>
-</section>
-
-<!-- ========== VISÃO DE DISCIPLINAS ========== -->
-<section class="cz-view" id="disciplinas-view" role="tabpanel">
-<button type="button" class="cz-back" id="voltar-disc" style="display:none;">← Voltar</button>
-
-<!-- Lista de Disciplinas -->
-<div id="disc-list-view">
-  <div>
-    <p class="cz-take">
-      Total de <b id="total-disciplinas">61</b> disciplinas. Clique em uma para ver a distribuição de professores.
-    </p>
-  </div>
-  <div class="cz-legend" aria-label="Legenda tipos">
-    <span><i class="cz-sw" style="background:#4a90e2"></i>Obrigatória</span>
-    <span><i class="cz-sw" style="background:#f5a623"></i>Eletiva</span>
-    <span><i class="cz-sw" style="background:#9013fe"></i>Pós-graduação</span>
-  </div>
-  <div class="cz-grid" id="disc-grid"></div>
-</div>
-
-<!-- Detalhe de Disciplina -->
-<div id="disc-detail-view" style="display:none;">
-  <div class="cz-prof">
-    <div>
-      <p class="cz-eyebrow" id="d-tipo">—</p>
-      <h2 id="d-nome">—</h2>
+    <div class="cz-tiles" id="tiles">
+      <div class="cz-tile"><div class="cz-tile-l">Docentes no semestre</div><div class="cz-tile-v dash-skeleton" data-source="departamento" data-field="docentes">—</div><div class="cz-tile-n">efetivos, substitutos e pós-docs</div></div>
+      <div class="cz-tile"><div class="cz-tile-l">Cumprem as duas regras</div><div class="cz-tile-v ok dash-skeleton" data-source="departamento" data-field="cumprem">—</div><div class="cz-tile-n">mínimo em obrigatórias e mínimo total</div></div>
+      <div class="cz-tile"><div class="cz-tile-l">Abaixo de algum mínimo</div><div class="cz-tile-v bad dash-skeleton" data-source="departamento" data-field="abaixo">—</div><div class="cz-tile-n">ver docentes em vermelho</div></div>
+      <div class="cz-tile"><div class="cz-tile-l">CH total do departamento</div><div class="cz-tile-v dash-skeleton" data-source="departamento" data-field="ch_total">—</div><div class="cz-tile-n">horas em 2027.1, graduação + pós</div></div>
     </div>
-    <div id="d-stats">
-      <div class="cz-chip"><span id="d-ch">0h</span></div>
+
+    <div class="cz-bar-row">
+      <h2 class="cz-h3" id="lista-docentes">Docentes</h2>
+      <div class="cz-seg" role="group" aria-label="Filtrar docentes">
+        <button type="button" data-filtro="todos" aria-pressed="true">Todos</button>
+        <button type="button" data-filtro="abaixo" aria-pressed="false">Abaixo do mínimo</button>
+      </div>
     </div>
-  </div>
+    <div class="cz-grid" id="grid" data-source="resumo"></div>
+  </section>
 
-  <div class="cz-cardbox cz-section">
-    <h3 class="cz-h3">Distribuição de Professores</h3>
-    <p class="cz-note">Carga horária de cada docente nesta disciplina.</p>
-    <div class="cz-prof-distribution" id="d-profs"></div>
-  </div>
-</div>
+  <!-- ========== PAINEL INDIVIDUAL ========== -->
+  <section class="cz-view" id="docente" hidden>
+    <button type="button" class="cz-back" id="voltar">← Todos os docentes</button>
+    <div class="cz-prof">
+      <div>
+        <p class="cz-eyebrow" id="p-papel">—</p>
+        <h2 id="p-nome">—</h2>
+      </div>
+      <div>
+        <div class="cz-chip" id="p-chip"><i class="cz-dot"></i><span>—</span></div>
+        <div class="cz-prev" id="p-prev"></div>
+      </div>
+    </div>
 
-</section>
+    <div class="cz-two">
+      <div class="cz-cardbox" id="regras">
+        <h3 class="cz-h3">Cumprimento das regras · 2027.1</h3>
+        <p class="cz-note">Barras na mesma escala. A linha vertical marca o mínimo exigido.</p>
+        <div class="cz-rule" id="r-obr"></div>
+        <div class="cz-rule" id="r-tot"></div>
+      </div>
+      <div class="cz-cardbox" id="composicao">
+        <h3 class="cz-h3">Como a carga se divide</h3>
+        <p class="cz-note">Horas e participação de cada tipo no total do docente.</p>
+        <div class="cz-donut-wrap">
+          <div class="cz-donut" id="donut" data-source="resumo"></div>
+          <div class="cz-comp" id="comp"></div>
+        </div>
+        <div class="cz-gradsplit" id="gradsplit"></div>
+      </div>
+    </div>
 
-<div class="cz-tip" id="tip" role="tooltip"></div>
+    <div class="cz-two">
+      <div class="cz-cardbox" id="cursos">
+        <h3 class="cz-h3">Horas por curso e programa</h3>
+        <p class="cz-note">Onde o docente atua na graduação e na pós.</p>
+        <div id="cursos-bars" data-source="por_curso"></div>
+      </div>
+      <div class="cz-cardbox" id="regras-texto">
+        <h3 class="cz-h3">Regras do semestre</h3>
+        <p class="cz-note">Valem para todos os docentes vinculados à pesquisa, incluindo substitutos e pós-docs.</p>
+        <div class="cz-rules-txt" id="rules-txt"></div>
+      </div>
+    </div>
+
+    <div class="cz-cardbox cz-section" id="disciplinas">
+      <h3 class="cz-h3">Disciplinas em 2027.1</h3>
+      <p class="cz-note" id="disc-note">Cada linha é uma disciplina ou programa em que o docente tem carga.</p>
+      <div class="cz-table-wrap">
+        <table class="cz-table" id="tabela" data-source="ch_2027_1" data-row-key="id">
+          <thead><tr>
+            <th data-field="disciplina">Disciplina</th>
+            <th data-field="curso" class="col-curso">Curso / programa</th>
+            <th data-field="tipo">Tipo</th>
+            <th data-field="ch" class="num">CH (h)</th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== LISTA DE DISCIPLINAS ========== -->
+  <section class="cz-view" id="disc-lista" hidden>
+    <header class="cz-head">
+      <div>
+        <p class="cz-eyebrow">Departamento de Zoologia · Centro de Biociências · UFPE</p>
+        <h1 class="cz-title">Carga horária por disciplina · 2027.1</h1>
+        <p class="cz-take">
+          <b id="dt-comp">—</b> de <b id="dt-total2">—</b> disciplinas são divididas entre dois ou mais docentes.
+          Clique em uma disciplina para ver quem ministra e como as horas se dividem.
+        </p>
+      </div>
+      <div class="cz-legend" aria-label="Legenda">
+        <span><i class="cz-sw" style="background:var(--c-obr)"></i>Obrigatória</span>
+        <span><i class="cz-sw" style="background:var(--c-ele)"></i>Eletiva</span>
+        <span><i class="cz-sw" style="background:var(--c-pos)"></i>Pós-graduação</span>
+        <span>Cada cor na barra é um docente</span>
+      </div>
+    </header>
+
+    <div class="cz-tiles">
+      <div class="cz-tile"><div class="cz-tile-l">Disciplinas e programas</div><div class="cz-tile-v" id="dt-total">—</div><div class="cz-tile-n">com carga em 2027.1</div></div>
+      <div class="cz-tile"><div class="cz-tile-l">Compartilhadas</div><div class="cz-tile-v" id="dt-comp2">—</div><div class="cz-tile-n">dois ou mais docentes</div></div>
+      <div class="cz-tile"><div class="cz-tile-l">Com um docente</div><div class="cz-tile-v" id="dt-unico">—</div><div class="cz-tile-n">um único responsável</div></div>
+      <div class="cz-tile"><div class="cz-tile-l">CH total das disciplinas</div><div class="cz-tile-v" id="dt-ch">—</div><div class="cz-tile-n">horas em 2027.1, graduação + pós</div></div>
+    </div>
+
+    <div class="cz-bar-row">
+      <h2 class="cz-h3">Disciplinas</h2>
+      <div class="cz-seg" role="group" aria-label="Filtrar disciplinas">
+        <button type="button" data-dfiltro="todas" aria-pressed="true">Todas</button>
+        <button type="button" data-dfiltro="comp" aria-pressed="false">Compartilhadas</button>
+        <button type="button" data-dfiltro="unico" aria-pressed="false">Um docente</button>
+      </div>
+    </div>
+    <div class="cz-grid" id="disc-grid"></div>
+  </section>
+
+  <!-- ========== PAINEL DA DISCIPLINA ========== -->
+  <section class="cz-view" id="disc-detalhe" hidden>
+    <button type="button" class="cz-back" id="voltar-disc">← Todas as disciplinas</button>
+    <div class="cz-prof">
+      <div>
+        <p class="cz-eyebrow" id="x-tipo">—</p>
+        <h2 id="x-nome">—</h2>
+      </div>
+      <div>
+        <div class="cz-chip" id="x-chip">—</div>
+        <div class="cz-prev" id="x-prev"></div>
+      </div>
+    </div>
+
+    <div class="cz-two">
+      <div class="cz-cardbox">
+        <h3 class="cz-h3">Como a carga se divide</h3>
+        <p class="cz-note">Participação de cada docente nas horas da disciplina.</p>
+        <div class="cz-donut-wrap">
+          <div class="cz-donut" id="x-donut"></div>
+          <div class="cz-comp" id="x-comp"></div>
+        </div>
+      </div>
+      <div class="cz-cardbox">
+        <h3 class="cz-h3">Distribuição entre os docentes</h3>
+        <p class="cz-note">A barra de cima é a disciplina inteira; as de baixo comparam os docentes na mesma escala. Clique em um nome para abrir o painel do docente.</p>
+        <div id="x-total-bar"></div>
+        <div class="cz-share" id="x-share"></div>
+      </div>
+    </div>
+
+    <div class="cz-cardbox cz-section">
+      <h3 class="cz-h3">Docentes da disciplina</h3>
+      <p class="cz-note">Situação de cada docente no semestre, considerando toda a sua carga.</p>
+      <div class="cz-table-wrap">
+        <table class="cz-table" id="x-tabela">
+          <thead><tr>
+            <th>Docente</th>
+            <th class="col-curso">Papel</th>
+            <th class="num">CH aqui (h)</th>
+            <th class="num">Parte</th>
+            <th class="num">CH total (h)</th>
+            <th>Situação</th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+  <div class="cz-tip" id="tip" role="tooltip"></div>
 </div>
 
 <script>
-// Dados exportados (23/10/2026)
+// Dados exportados da aba "Planejamento CH 2027.1" (gerado em 23/10/2026)
 window.__CZ_DATA = {"ch_2027_1": [{"id": "Nídia Marinho · ZO408 Ecologia de Praias Arenosas", "docente": "Nídia Marinho", "disciplina": "ZO408 Ecologia de Praias Arenosas", "curso": "Bacharelado", "tipo": "Eletiva", "ch": 36, "obs": ""}, {"id": "Paula Coutinho · ZO414 Mastozoologia", "docente": "Paula Coutinho", "disciplina": "ZO414 Mastozoologia", "curso": "Bacharelado", "tipo": "Eletiva", "ch": 15, "obs": ""}, {"id": "Renata Campelo · ZO426 Ecossistemas Aquáticos", "docente": "Renata Campelo", "disciplina": "ZO426 Ecossistemas Aquáticos", "curso": "Ambientais", "tipo": "Obrigatória", "ch": 15, "obs": ""}, {"id": "Renata Campelo · ZO427 Licenciamento e Avaliação de Impactos Ambientais", "docente": "Renata Campelo", "disciplina": "ZO427 Licenciamento e Avaliação de Impactos Ambientais", "curso": "Ambientais", "tipo": "Obrigatória", "ch": 45, "obs": ""}, {"id": "Renata Campelo · ZO428 Bioindicadores Ambientais", "docente": "Renata Campelo", "disciplina": "ZO428 Bioindicadores Ambientais", "curso": "Ambientais", "tipo": "Obrigatória", "ch": 60, "obs": ""}, {"id": "Maria Clara Brito · INT0173 Ecologia de Campo", "docente": "Maria Clara Brito", "disciplina": "INT0173 Ecologia de Campo", "curso": "Bacharelado", "tipo": "Obrigatória", "ch": 25, "obs": ""}, {"id": "Maria Clara Brito · ZO381 Chordata 1", "docente": "Maria Clara Brito", "disciplina": "ZO381 Chordata 1", "curso": "Licenciatura", "tipo": "Obrigatória", "ch": 30, "obs": ""}, {"id": "Maria Clara Brito · ZO382 Chordata 2", "docente": "Maria Clara Brito", "disciplina": "ZO382 Chordata 2", "curso": "Licenciatura", "tipo": "Obrigatória", "ch": 20, "obs": ""}, {"id": "Maria Clara Brito · ZO383 Ecologia 1", "docente": "Maria Clara Brito", "disciplina": "ZO383 Ecologia 1", "curso": "Licenciatura", "tipo": "Obrigatória", "ch": 30, "obs": ""}, {"id": "Maria Clara Brito · ZO431 Análise de Risco Ecológico", "docente": "Maria Clara Brito", "disciplina": "ZO431 Análise de Risco Ecológico", "curso": "Ambientais", "tipo": "Obrigatória", "ch": 15, "obs": ""}, {"id": "Maria Clara Brito · BCA009 Desenvolvimento sustentável", "docente": "Maria Clara Brito", "disciplina": "BCA009 Desenvolvimento sustentável", "curso": "Ambientais", "tipo": "Obrigatória", "ch": 15, "obs": ""}, {"id": "Adriane Wandeness · ZO396 Zoologia 1 (60 h + 30 h de subturma)", "docente": "Adriane Wandeness", "disciplina": "ZO396 Zoologia 1 (60 h + 30 h de subturma)", "curso": "Bacharelado", "tipo": "Obrigatória", "ch": 16, "obs": ""}, {"id": "Adriane Wandeness · INT0154 Microrganismos", "docente": "Adriane Wandeness", "disciplina": "INT0154 Microrganismos", "curso": "Bacharelado", "tipo": "Obrigatória", "ch": 30, "obs": ""}, {"id": "Adriane Wandeness · ZO379 Invertebrados 1", "docente": "Adriane Wandeness", "disciplina": "ZO379 Invertebrados 1", "curso": "Licenciatura", "tipo": "Obrigatória", "ch": 14, "obs": ""}, {"id": "Adriane Wandeness · BCA001 Atuação profissional", "docente": "Adriane Wandeness", "disciplina": "BCA001 Atuação profissional", "curso": "Ambientais", "tipo": "Obrigatória", "ch": 10, "obs": ""}, {"id": "Adriane Wandeness · Proficiamb", "docente": "Adriane Wandeness", "disciplina": "Proficiamb", "curso": "Proficiamb", "tipo": "Pós-graduação", "ch": 22, "obs": ""}, {"id": "Alexandre Almeida · ZO397 Zoologia 2", "docente": "Alexandre Almeida", "disciplina": "ZO397 Zoologia 2", "curso": "Bacharelado", "tipo": "Obrigatória", "ch": 18, "obs": ""}, {"id": "Alexandre Almeida · ZO380 Invertebrados 2", "docente": "Alexandre Almeida", "disciplina": "ZO380 Invertebrados 2", "curso": "Licenciatura", "tipo": "Obrigatória", "ch": 30, "obs": ""}, {"id": "Alexandre Almeida · ZO422 Biologia de Ecdysozoa", "docente": "Alexandre Almeida", "disciplina": "ZO422 Biologia de Ecdysozoa", "curso": "Ambientais", "tipo": "Obrigatória", "ch": 16, "obs": ""}, {"id": "Alexandre Almeida · ZO426 Ecossistemas Aquáticos", "docente": "Alexandre Almeida", "disciplina": "ZO426 Ecossistemas Aquáticos", "curso": "Ambientais", "tipo": "Obrigatória", "ch": 15, "obs": ""}, {"id": "Alexandre Almeida · ZO335 Macrobentos Marinhos e Estuarinos", "docente": "Alexandre Almeida", "disciplina": "ZO335 Macrobentos Marinhos e Estuarinos", "curso": "Licenciatura", "tipo": "Eletiva", "ch": 60, "obs": ""}, {"id": "Antonio Souto · ZO225 Metodologia de Investigação Científica", "docente": "Antonio Souto", "disciplina": "ZO225 Metodologia de Investigação Científica", "curso": "Biomedicina", "tipo": "Obrigatória", "ch": 90, "obs": ""}, {"id": "Antonio Souto · ZO437 Fotografia e Filmagem da Natureza", "docente": "Antonio Souto", "disciplina": "ZO437 Fotografia e Filmagem da Natureza", "curso": "Ambientais", "tipo": "Eletiva", "ch": 45, "obs": ""}, {"id": "Bárbara Moraes · ZO425 Introdução aos Impactos Ambientais", "docente": "Bárbara Moraes", "disciplina": "ZO425 Introdução aos Impactos Ambientais", "curso": "Ambientais", "tipo": "Obrigatória", "ch": 30, "obs": ""}, {"id": "Bárbara Moraes · ZO431 Análise de Risco Ecológico", "docente": "Bárbara Moraes", "disciplina": "ZO431 Análise de Risco Ecológico", "curso": "Ambientais", "tipo": "Obrigatória", "ch": 30, "obs": ""}, {"id": "Bárbara Moraes · BCA001 Atuação profissional", "docente": "Bárbara Moraes", "disciplina": "BCA001 Atuação profissional", "curso": "Ambientais", "tipo": "Obrigatória", "ch": 10, "obs": ""}, {"id": "Bárbara Moraes · BCA007 Estágio Supervisionado 2", "docente": "Bárbara Moraes", "disciplina": "BCA007 Estágio Supervisionado 2", "curso": "Ambientais", "tipo": "Obrigatória", "ch": 30, "obs": ""}, {"id": "Bárbara Moraes · ZO200 Atuação profissional do Biólogo", "docente": "Bárbara Moraes", "disciplina": "ZO200 Atuação profissional do Biólogo", "curso": "Licenciatura", "tipo": "Eletiva", "ch": 30, "obs": ""}, {"id": "Bruna Bezerra · ZO382 Chordata 2", "docente": "Bruna Bezerra", "disciplina": "ZO382 Chordata 2", "curso": "Licenciatura", "tipo": "Obrigatória", "ch": 20, "obs": ""}, {"id": "Bruna Bezerra · BCA001 Atuação profissional", "docente": "Bruna Bezerra", "disciplina": "BCA001 Atuação profissional", "curso": "Ambientais", "tipo": "Obrigatória", "ch": 10, "obs": ""}, {"id": "Bruna Bezerra · PPGBA", "docente": "Bruna Bezerra", "disciplina": "PPGBA", "curso": "PPGBA", "tipo": "Pós-graduação", "ch": 30, "obs": ""}, {"id": "Carla Ribas · ZO399 Biologia da Conservação 1", "docente": "Carla Ribas", "disciplina": "ZO399 Biologia da Conservação 1", "curso": "Bacharelado", "tipo": "Obrigatória", "ch": 15, "obs": ""}, {"id": "Carla Ribas · ZO403 Biologia da Conservação 2", "docente": "Carla Ribas", "disciplina": "ZO403 Biologia da Conservação 2", "curso": "Bacharelado", "tipo": "Obrigatória", "ch": 45, "obs": ""}, {"id": "Carla Ribas · ZO429 Biologia da Conservação", "docente": "Carla Ribas", "disciplina": "ZO429 Biologia da Conservação", "curso": "Ambientais", "tipo": "Obrigatória", "ch": 60, "obs": ""}, {"id": "Carla Ribas · PPGBA", "docente": "Carla Ribas", "disciplina": "PPGBA", "curso": "PPGBA", "tipo": "Pós-graduação", "ch": 20, "obs": ""}, {"id": "Débora Melo · ZO397 Zoologia 2", "docente": "Débora Melo", "disciplina": "ZO397 Zoologia 2", "curso": "Bacharelado", "tipo": "Obrigatória", "ch": 30, "obs": ""}, {"id": "Débora Melo · ZO423 Ecologia de Populações", "docente": "Débora Melo", "disciplina": "ZO423 Ecologia de Populações", "curso": "Ambientais", "tipo": "Obrigatória", "ch": 60, "obs": ""}, {"id": "Débora Melo · BCA004 Diagnóstico Ambiental (Inventários)", "docente": "Débora Melo", "disciplina": "BCA004 Diagnóstico Ambiental (Inventários)", "curso": "Ambientais", "tipo": "Obrigatória", "ch": 22, "obs": ""}, {"id": "Débora Melo · ZO430 Controle de Vetores", "docente": "Débora Melo", "disciplina": "ZO430 Controle de Vetores", "curso": "Ambientais", "tipo": "Obrigatória", "ch": 15, "obs": ""}, {"id": "Diego Astúa · ZO398 Anatomia Comparada", "docente": "Diego Astúa", "disciplina": "ZO398 Anatomia Comparada", "curso": "Bacharelado", "tipo": "Obrigatória", "ch": 60, "obs": ""}, {"id": "Diego Astúa · ZO400 Zoologia 3", "docente": "Diego Astúa", "disciplina": "ZO400 Zoologia 3", "curso": "Bacharelado", "tipo": "Obrigatória", "ch": 16, "obs": ""}, {"id": "Diego Astúa · INT0166 Coleções Biológicas", "docente": "Diego Astúa", "disciplina": "INT0166 Coleções Biológicas", "curso": "Bacharelado", "tipo": "Obrigatória", "ch": 10, "obs": ""}, {"id": "Diego Astúa · ZO424 Biologia de Deuterostomia", "docente": "Diego Astúa", "disciplina": "ZO424 Biologia de Deuterostomia", "curso": "Ambientais", "tipo": "Obrigatória", "ch": 20, "obs": ""}, {"id": "Diego Astúa · ZO414 Mastozoologia", "docente": "Diego Astúa", "disciplina": "ZO414 Mastozoologia", "curso": "Bacharelado", "tipo": "Eletiva", "ch": 30, "obs": ""}, {"id": "Gilberto Rodrigues · ZO404 Ecologia de Ambientes Aquáticos", "docente": "Gilberto Rodrigues", "disciplina": "ZO404 Ecologia de Ambientes Aquáticos", "curso": "Bacharelado", "tipo": "Obrigatória", "ch": 30, "obs": ""}, {"id": "Gilberto Rodrigues · INT0158 Ecologia 2", "docente": "Gilberto Rodrigues", "disciplina": "INT0158 Ecologia 2", "curso": "Bacharelado", "tipo": "Obrigatória", "ch": 23, "obs": ""}, {"id": "Gilberto Rodrigues · ZO426 Ecossistemas Aquáticos", "docente": "Gilberto Rodrigues", "disciplina": "ZO426 Ecossistemas Aquáticos", "curso": "Ambientais", "tipo": "Obrigatória", "ch": 30, "obs": ""}, {"id": "Gilberto Rodrigues · PRODEMA", "docente": "Gilberto Rodrigues", "disciplina": "PRODEMA", "curso": "PRODEMA", "tipo": "Pós-graduação", "ch": 45, "obs": ""}, {"id": "Giovanni Santos · ZO396 Zoologia 1 (60 h + 30 h de subturma)", "docente": "Giovanni Santos", "disciplina": "ZO396 Zoologia 1 (60 h + 30 h de subturma)", "curso": "Bacharelado", "tipo": "Obrigatória", "ch": 16, "obs": ""}, {"id": "Giovanni Santos · ZO422 Biologia de Ecdysozoa", "docente": "Giovanni Santos", "disciplina": "ZO422 Biologia de Ecdysozoa", "curso": "Ambientais", "tipo": "Obrigatória", "ch": 14, "obs": ""}, {"id": "Giovanni Santos · PPGBA", "docente": "Giovanni Santos", "disciplina": "PPGBA", "curso": "PPGBA", "tipo": "Pós-graduação", "ch": 30, "obs": ""}, {"id": "João Lucas Feitosa · ZO400 Zoologia 3", "docente": "João Lucas Feitosa", "disciplina": "ZO400 Zoologia 3", "curso": "Bacharelado", "tipo": "Obrigatória", "ch": 30, "obs": ""}, {"id": "João Lucas Feitosa · ZO381 Chordata 1", "docente": "João Lucas Feitosa", "disciplina": "ZO381 Chordata 1", "curso": "Licenciatura", "tipo": "Obrigatória", "ch": 10, "obs": ""}, {"id": "João Lucas Feitosa · ZO424 Biologia de Deuterostomia", "docente": "João Lucas Feitosa", "disciplina": "ZO424 Biologia de Deuterostomia", "curso": "Ambientais", "tipo": "Obrigatória", "ch": 20, "obs": ""}, {"id": "João Lucas Feitosa · PPGBA", "docente": "João Lucas Feitosa", "disciplina": "PPGBA", "curso": "PPGBA", "tipo": "Pós-graduação", "ch": 60, "obs": ""}, {"id": "Leandro Vieira · ZO401 Evolução de Invertebrados", "docente": "Leandro Vieira", "disciplina": "ZO401 Evolução de Invertebrados", "curso": "Bacharelado", "tipo": "Obrigatória", "ch": 30, "obs": ""}, {"id": "Leandro Vieira · ZO420 Biologia de Metazoários Basais e Spiralia", "docente": "Leandro Vieira", "disciplina": "ZO420 Biologia de Metazoários Basais e Spiralia", "curso": "Ambientais", "tipo": "Obrigatória", "ch": 90, "obs": ""}, {"id": "Luciana Iannuzzi · ZO397 Zoologia 2", "docente": "Luciana Iannuzzi", "disciplina": "ZO397 Zoologia 2", "curso": "Bacharelado", "tipo": "Obrigatória", "ch": 42, "obs": ""}, {"id": "Luciana Iannuzzi · INT0161 Parasitologia", "docente": "Luciana Iannuzzi", "disciplina": "INT0161 Parasitologia", "curso": "Bacharelado", "tipo": "Obrigatória", "ch": 22, "obs": ""}, {"id": "Luciana Iannuzzi · INT0168 Taxonomia e Nomenclatura Biológica", "docente": "Luciana Iannuzzi", "disciplina": "INT0168 Taxonomia e Nomenclatura Biológica", "curso": "Bacharelado", "tipo": "Obrigatória", "ch": 15, "obs": ""}, {"id": "Luciana Iannuzzi · INT TCC ou INT0180 Estágio obrigatório", "docente": "Luciana Iannuzzi", "disciplina": "INT TCC ou INT0180 Estágio obrigatório", "curso": "Bacharelado", "tipo": "Obrigatória", "ch": 30, "obs": ""}, {"id": "Luciana Iannuzzi · INT821 Estágio supervisionado", "docente": "Luciana Iannuzzi", "disciplina": "INT821 Estágio supervisionado", "curso": "Ambientais", "tipo": "Obrigatória", "ch": 30, "obs": ""}, {"id": "Luiz Felipe Iniesta · ZO396 Zoologia 1 (60 h + 30 h de subturma)", "docente": "Luiz Felipe Iniesta", "disciplina": "ZO396 Zoologia 1 (60 h + 30 h de subturma)", "curso": "Bacharelado", "tipo": "Obrigatória", "ch": 14, "obs": ""}, {"id": "Luiz Felipe Iniesta · ZO379 Invertebrados 1", "docente": "Luiz Felipe Iniesta", "disciplina": "ZO379 Invertebrados 1", "curso": "Licenciatura", "tipo": "Obrigatória", "ch": 60, "obs": ""}, {"id": "Luiz Felipe Iniesta · ZO310 Ecologia", "docente": "Luiz Felipe Iniesta", "disciplina": "ZO310 Ecologia", "curso": "Biomedicina", "tipo": "Obrigatória", "ch": 30, "obs": ""}, {"id": "Paulo Braga · ZO399 Biologia da Conservação 1", "docente": "Paulo Braga", "disciplina": "ZO399 Biologia da Conservação 1", "curso": "Bacharelado", "tipo": "Obrigatória", "ch": 15, "obs": ""}, {"id": "Paulo Braga · INT0157 Bioestatística", "docente": "Paulo Braga", "disciplina": "INT0157 Bioestatística", "curso": "Bacharelado", "tipo": "Obrigatória", "ch": 22, "obs": ""}, {"id": "Paulo Braga · INT0156 Ecologia 1", "docente": "Paulo Braga", "disciplina": "INT0156 Ecologia 1", "curso": "Bacharelado", "tipo": "Obrigatória", "ch": 23, "obs": ""}, {"id": "Paulo Braga · ZO310 Ecologia", "docente": "Paulo Braga", "disciplina": "ZO310 Ecologia", "curso": "Biomedicina", "tipo": "Obrigatória", "ch": 30, "obs": ""}, {"id": "Paulo Braga · PPGBA", "docente": "Paulo Braga", "disciplina": "PPGBA", "curso": "PPGBA", "tipo": "Pós-graduação", "ch": 45, "obs": ""}, {"id": "Paulo Carvalho · ZO405 Monitoramento Ambiental", "docente": "Paulo Carvalho", "disciplina": "ZO405 Monitoramento Ambiental", "curso": "Bacharelado", "tipo": "Obrigatória", "ch": 45, "obs": ""}, {"id": "Paulo Carvalho · ZO432 Poluição Ambiental", "docente": "Paulo Carvalho", "disciplina": "ZO432 Poluição Ambiental", "curso": "Ambientais", "tipo": "Obrigatória", "ch": 60, "obs": ""}, {"id": "Paulo Carvalho · PPGBA", "docente": "Paulo Carvalho", "disciplina": "PPGBA", "curso": "PPGBA", "tipo": "Pós-graduação", "ch": 45, "obs": ""}, {"id": "Paulo Santos · ZO419 Análise de Dados Ambientais 1", "docente": "Paulo Santos", "disciplina": "ZO419 Análise de Dados Ambientais 1", "curso": "Ambientais", "tipo": "Obrigatória", "ch": 45, "obs": ""}, {"id": "Paulo Santos · ZO421 Análise de Dados Ambientais 2", "docente": "Paulo Santos", "disciplina": "ZO421 Análise de Dados Ambientais 2", "curso": "Ambientais", "tipo": "Obrigatória", "ch": 45, "obs": ""}, {"id": "Paulo Santos · ZO408 Ecologia de Praias Arenosas", "docente": "Paulo Santos", "disciplina": "ZO408 Ecologia de Praias Arenosas", "curso": "Bacharelado", "tipo": "Eletiva", "ch": 9, "obs": ""}, {"id": "Paulo Santos · PPGBA", "docente": "Paulo Santos", "disciplina": "PPGBA", "curso": "PPGBA", "tipo": "Pós-graduação", "ch": 30, "obs": ""}, {"id": "Pedro Ivo Simões · ZO400 Zoologia 3", "docente": "Pedro Ivo Simões", "disciplina": "ZO400 Zoologia 3", "curso": "Bacharelado", "tipo": "Obrigatória", "ch": 14, "obs": ""}, {"id": "Pedro Ivo Simões · ZO402 Evolução dos Cordados", "docente": "Pedro Ivo Simões", "disciplina": "ZO402 Evolução dos Cordados", "curso": "Bacharelado", "tipo": "Obrigatória", "ch": 22, "obs": ""}, {"id": "Pedro Ivo Simões · ZO381 Chordata 1", "docente": "Pedro Ivo Simões", "disciplina": "ZO381 Chordata 1", "curso": "Licenciatura", "tipo": "Obrigatória", "ch": 20, "obs": ""}, {"id": "Pedro Ivo Simões · ZO424 Biologia de Deuterostomia", "docente": "Pedro Ivo Simões", "disciplina": "ZO424 Biologia de Deuterostomia", "curso": "Ambientais", "tipo": "Obrigatória", "ch": 34, "obs": ""}, {"id": "Pedro Ivo Simões · PPGBA", "docente": "Pedro Ivo Simões", "disciplina": "PPGBA", "curso": "PPGBA", "tipo": "Pós-graduação", "ch": 30, "obs": ""}, {"id": "Pedro Nunes · ZO400 Zoologia 3", "docente": "Pedro Nunes", "disciplina": "ZO400 Zoologia 3", "curso": "Bacharelado", "tipo": "Obrigatória", "ch": 14, "obs": ""}, {"id": "Pedro Nunes · INT0155 Sistemática e Biogeografia", "docente": "Pedro Nunes", "disciplina": "INT0155 Sistemática e Biogeografia", "curso": "Bacharelado", "tipo": "Obrigatória", "ch": 22, "obs": ""}, {"id": "Pedro Nunes · ZO382 Chordata 2", "docente": "Pedro Nunes", "disciplina": "ZO382 Chordata 2", "curso": "Licenciatura", "tipo": "Obrigatória", "ch": 20, "obs": ""}, {"id": "Pedro Nunes · ZO424 Biologia de Deuterostomia", "docente": "Pedro Nunes", "disciplina": "ZO424 Biologia de Deuterostomia", "curso": "Ambientais", "tipo": "Obrigatória", "ch": 16, "obs": ""}, {"id": "Pedro Nunes · PPGBA", "docente": "Pedro Nunes", "disciplina": "PPGBA", "curso": "PPGBA", "tipo": "Pós-graduação", "ch": 45, "obs": ""}, {"id": "Rodrigo Torres · ZO400 Zoologia 3", "docente": "Rodrigo Torres", "disciplina": "ZO400 Zoologia 3", "curso": "Bacharelado", "tipo": "Obrigatória", "ch": 16, "obs": ""}, {"id": "Rodrigo Torres · ZO402 Evolução dos Cordados", "docente": "Rodrigo Torres", "disciplina": "ZO402 Evolução dos Cordados", "curso": "Bacharelado", "tipo": "Obrigatória", "ch": 8, "obs": ""}, {"id": "Rodrigo Torres · INT0170 Biogeografia histórica", "docente": "Rodrigo Torres", "disciplina": "INT0170 Biogeografia histórica", "curso": "Bacharelado", "tipo": "Obrigatória", "ch": 23, "obs": ""}, {"id": "Rodrigo Torres · INT0167 Sistemática Filogenética", "docente": "Rodrigo Torres", "disciplina": "INT0167 Sistemática Filogenética", "curso": "Bacharelado", "tipo": "Obrigatória", "ch": 20, "obs": ""}, {"id": "Rodrigo Torres · BO405 Especiação", "docente": "Rodrigo Torres", "disciplina": "BO405 Especiação", "curso": "Botânica (interdepartamental)", "tipo": "Eletiva", "ch": 22, "obs": ""}, {"id": "Rodrigo Torres · PPGBA", "docente": "Rodrigo Torres", "disciplina": "PPGBA", "curso": "PPGBA", "tipo": "Pós-graduação", "ch": 45, "obs": ""}, {"id": "Simão Vasconcelos · ZO380 Invertebrados 2", "docente": "Simão Vasconcelos", "disciplina": "ZO380 Invertebrados 2", "curso": "Licenciatura", "tipo": "Obrigatória", "ch": 60, "obs": ""}, {"id": "Simão Vasconcelos · ZO430 Controle de Vetores", "docente": "Simão Vasconcelos", "disciplina": "ZO430 Controle de Vetores", "curso": "Ambientais", "tipo": "Obrigatória", "ch": 15, "obs": ""}, {"id": "Simão Vasconcelos · ProfBio (CAV)", "docente": "Simão Vasconcelos", "disciplina": "ProfBio (CAV)", "curso": "ProfBio (CAV)", "tipo": "Pós-graduação", "ch": 60, "obs": ""}, {"id": "Ulisses Pinheiro · ZO396 Zoologia 1 (60 h + 30 h de subturma)", "docente": "Ulisses Pinheiro", "disciplina": "ZO396 Zoologia 1 (60 h + 30 h de subturma)", "curso": "Bacharelado", "tipo": "Obrigatória", "ch": 14, "obs": ""}, {"id": "Ulisses Pinheiro · ZO379 Invertebrados 1", "docente": "Ulisses Pinheiro", "disciplina": "ZO379 Invertebrados 1", "curso": "Licenciatura", "tipo": "Obrigatória", "ch": 16, "obs": ""}, {"id": "Ulisses Pinheiro · PPGBA", "docente": "Ulisses Pinheiro", "disciplina": "PPGBA", "curso": "PPGBA", "tipo": "Pós-graduação", "ch": 30, "obs": ""}, {"id": "Wagner Melo · INT0172 Ecologia Numérica", "docente": "Wagner Melo", "disciplina": "INT0172 Ecologia Numérica", "curso": "Bacharelado", "tipo": "Obrigatória", "ch": 22, "obs": ""}, {"id": "Wagner Melo · ZO383 Ecologia 1", "docente": "Wagner Melo", "disciplina": "ZO383 Ecologia 1", "curso": "Licenciatura", "tipo": "Obrigatória", "ch": 30, "obs": ""}, {"id": "Wagner Melo · BCA008 TCC Trabalho de Conclusão de Curso", "docente": "Wagner Melo", "disciplina": "BCA008 TCC Trabalho de Conclusão de Curso", "curso": "Ambientais", "tipo": "Obrigatória", "ch": 40, "obs": ""}, {"id": "Wagner Melo · PPGBA", "docente": "Wagner Melo", "disciplina": "PPGBA", "curso": "PPGBA", "tipo": "Pós-graduação", "ch": 30, "obs": ""}, {"id": "Wendel Pontes · ZO396 Zoologia 1 (60 h + 30 h de subturma)", "docente": "Wendel Pontes", "disciplina": "ZO396 Zoologia 1 (60 h + 30 h de subturma)", "curso": "Bacharelado", "tipo": "Obrigatória", "ch": 30, "obs": ""}, {"id": "Wendel Pontes · INT0151 Metodologia Científica e Filosofia da Ciência", "docente": "Wendel Pontes", "disciplina": "INT0151 Metodologia Científica e Filosofia da Ciência", "curso": "Bacharelado", "tipo": "Obrigatória", "ch": 22, "obs": ""}, {"id": "Wendel Pontes · ZO422 Biologia de Ecdysozoa", "docente": "Wendel Pontes", "disciplina": "ZO422 Biologia de Ecdysozoa", "curso": "Ambientais", "tipo": "Obrigatória", "ch": 30, "obs": ""}, {"id": "Wendel Pontes · ZO430 Controle de Vetores", "docente": "Wendel Pontes", "disciplina": "ZO430 Controle de Vetores", "curso": "Ambientais", "tipo": "Obrigatória", "ch": 15, "obs": ""}, {"id": "Wendel Pontes · PPGBA", "docente": "Wendel Pontes", "disciplina": "PPGBA", "curso": "PPGBA", "tipo": "Pós-graduação", "ch": 30, "obs": ""}], "docentes": [{"docente": "Nídia Marinho", "papel": "Pós-doc", "reducao": false, "min_total": 120, "min_obr": 60, "total_262": 36, "obr_262": 0}, {"docente": "Paula Coutinho", "papel": "Pós-doc", "reducao": false, "min_total": 120, "min_obr": 60, "total_262": null, "obr_262": null}, {"docente": "Renata Campelo", "papel": "Prof. substituto", "reducao": false, "min_total": 120, "min_obr": 60, "total_262": 135, "obr_262": 135}, {"docente": "Maria Clara Brito", "papel": "Prof. substituto", "reducao": false, "min_total": 120, "min_obr": 60, "total_262": 135, "obr_262": 135}, {"docente": "Adriane Wandeness", "papel": "Redução legal", "reducao": true, "min_total": 60, "min_obr": 30, "total_262": 70, "obr_262": 70}, {"docente": "Alexandre Almeida", "papel": "Docente", "reducao": false, "min_total": 120, "min_obr": 60, "total_262": 124, "obr_262": 79}, {"docente": "Antonio Souto", "papel": "Docente", "reducao": false, "min_total": 120, "min_obr": 60, "total_262": 135, "obr_262": 90}, {"docente": "Bárbara Moraes", "papel": "Docente", "reducao": false, "min_total": 120, "min_obr": 60, "total_262": 120, "obr_262": 70}, {"docente": "Bruna Bezerra", "papel": "Coord. PIBIC", "reducao": true, "min_total": 60, "min_obr": 30, "total_262": 60, "obr_262": 30}, {"docente": "Carla Ribas", "papel": "Docente", "reducao": false, "min_total": 120, "min_obr": 60, "total_262": 120, "obr_262": 120}, {"docente": "Débora Melo", "papel": "Docente", "reducao": false, "min_total": 120, "min_obr": 60, "total_262": 127, "obr_262": 127}, {"docente": "Diego Astúa", "papel": "Docente", "reducao": false, "min_total": 120, "min_obr": 60, "total_262": 106, "obr_262": 106}, {"docente": "Gilberto Rodrigues", "papel": "Docente", "reducao": false, "min_total": 120, "min_obr": 60, "total_262": 143, "obr_262": 98}, {"docente": "Giovanni Santos", "papel": "Chefia do departamento", "reducao": true, "min_total": 60, "min_obr": 30, "total_262": 60, "obr_262": 30}, {"docente": "João Lucas Feitosa", "papel": "Docente", "reducao": false, "min_total": 120, "min_obr": 60, "total_262": 120, "obr_262": 60}, {"docente": "Leandro Vieira", "papel": "Docente", "reducao": false, "min_total": 120, "min_obr": 60, "total_262": 105, "obr_262": 90}, {"docente": "Luciana Iannuzzi", "papel": "Docente", "reducao": false, "min_total": 120, "min_obr": 60, "total_262": 153, "obr_262": 153}, {"docente": "Luiz Felipe Iniesta", "papel": "Docente", "reducao": false, "min_total": 120, "min_obr": 60, "total_262": 149, "obr_262": 104}, {"docente": "Paulo Braga", "papel": "Docente", "reducao": false, "min_total": 120, "min_obr": 60, "total_262": 130, "obr_262": 91}, {"docente": "Paulo Carvalho", "papel": "Docente", "reducao": false, "min_total": 120, "min_obr": 60, "total_262": 105, "obr_262": 105}, {"docente": "Paulo Santos", "papel": "Docente", "reducao": false, "min_total": 120, "min_obr": 60, "total_262": 144, "obr_262": 90}, {"docente": "Pedro Ivo Simões", "papel": "Docente", "reducao": false, "min_total": 120, "min_obr": 60, "total_262": 120, "obr_262": 90}, {"docente": "Pedro Nunes", "papel": "Docente", "reducao": false, "min_total": 120, "min_obr": 60, "total_262": 132, "obr_262": 72}, {"docente": "Rodrigo Torres", "papel": "Docente", "reducao": false, "min_total": 120, "min_obr": 60, "total_262": 119, "obr_262": 67}, {"docente": "Simão Vasconcelos", "papel": "Docente", "reducao": false, "min_total": 120, "min_obr": 60, "total_262": 135, "obr_262": 75}, {"docente": "Ulisses Pinheiro", "papel": "Coord. PPGBA", "reducao": true, "min_total": 60, "min_obr": 30, "total_262": 60, "obr_262": 30}, {"docente": "Wagner Melo", "papel": "Docente", "reducao": false, "min_total": 120, "min_obr": 60, "total_262": 127, "obr_262": 82}, {"docente": "Wendel Pontes", "papel": "Docente", "reducao": false, "min_total": 120, "min_obr": 60, "total_262": 120, "obr_262": 120}]};
-
-// Processar dados de disciplinas
-var disciplinas = {};
-window.__CZ_DATA.ch_2027_1.forEach(function(d) {
-  if (!disciplinas[d.disciplina]) {
-    disciplinas[d.disciplina] = {
-      nome: d.disciplina,
-      tipo: d.tipo,
-      curso: d.curso,
-      professores: [],
-      ch_total: 0
-    };
+(function () {
+  var D = window.__CZ_DATA, calcs = {}, order = [], subs = [];
+  function rows(id) {
+    if (D[id]) return D[id];
+    if (calcs[id]) { if (!calcs[id].cache) calcs[id].cache = calcs[id].fn.apply(null, calcs[id].inputs.map(rows)); return calcs[id].cache; }
+    return [];
   }
-  disciplinas[d.disciplina].professores.push({docente: d.docente, ch: d.ch});
-  disciplinas[d.disciplina].ch_total += d.ch;
+  function readParams() {
+    var p = {}, h = location.hash.replace(/^#/, '');
+    h.split('&').forEach(function (kv) { if (!kv) return; var i = kv.indexOf('='); p[decodeURIComponent(kv.slice(0, i))] = decodeURIComponent(kv.slice(i + 1)); });
+    return { docente: p.docente || null, view: p.view || null, disciplina: p.disciplina || null };
+  }
+  function run() { subs.forEach(function (fn) { try { fn(); } catch (e) { console.error(e); } }); }
+  var css = getComputedStyle(document.documentElement);
+  window.dash = {
+    colors: ['var(--c1)', 'var(--c2)', 'var(--c3)', 'var(--c4)'],
+    calc: function (id, o) { calcs[id] = { fn: o.fn, inputs: o.inputs || [] }; order.push(id); },
+    loader: function () {},
+    data: function (id) { var d = rows(id); return { status: 'ok', data: d, rows: d, columns: d.length ? Object.keys(d[0]) : [], refreshing: false, meta: [] }; },
+    onData: function (fn) { subs.push(fn); fn(); },
+    params: readParams,
+    setParams: function (o) {
+      var p = readParams(); for (var k in o) p[k] = o[k];
+      var h = ['view', 'disciplina', 'docente'].filter(function (k) { return p[k]; }).map(function (k) { return k + '=' + encodeURIComponent(p[k]); }).join('&');
+      if (('#' + h) !== location.hash && !(h === '' && location.hash === '')) { history.pushState(null, '', h ? '#' + h : location.pathname + location.search); }
+      run();
+    },
+    resetParams: function () { history.pushState(null, '', location.pathname + location.search); run(); },
+    setLink: function () {},
+    refresh: function () {}
+  };
+  window.addEventListener('hashchange', run);
+  window.addEventListener('popstate', run);
+  var t; window.addEventListener('resize', function () { clearTimeout(t); t = setTimeout(run, 150); });
+})();
+</script>
+<script>
+dash.calc('resumo', {
+  title: 'Resumo por docente',
+  description: 'Soma a CH 2027.1 de cada docente por tipo, compara com os mínimos do docente e com o total de 2026.2.',
+  inputs: ['ch_2027_1', 'docentes'],
+  fn: (ch_2027_1, docentes) => docentes.map((d) => {
+    const itens = ch_2027_1.filter((r) => r.docente === d.docente);
+    const soma = (tipo) => itens.filter((r) => r.tipo === tipo).reduce((a, r) => a + Number(r.ch), 0);
+    const obrigatoria = soma('Obrigatória');
+    const eletiva = soma('Eletiva');
+    const pos = soma('Pós-graduação');
+    const orientacao = soma('Orientação');
+    const total = obrigatoria + eletiva + pos + orientacao;
+    const grad = obrigatoria + eletiva + orientacao;
+    const min_obr = Number(d.min_obr);
+    const min_total = Number(d.min_total);
+    const total_262 = d.total_262 == null ? null : Number(d.total_262);
+    return {
+      docente: d.docente, papel: d.papel, obrigatoria, eletiva, pos, orientacao, total,
+      min_obr, min_total, saldo_obr: obrigatoria - min_obr, saldo_total: total - min_total,
+      situacao: obrigatoria >= min_obr && total >= min_total ? 'Cumpre' : 'Abaixo do mínimo',
+      pct_obrigatoria: total ? obrigatoria / total : 0, pct_eletiva: total ? eletiva / total : 0,
+      pct_pos: total ? pos / total : 0, pct_orientacao: total ? orientacao / total : 0,
+      grad_obrigatoria: grad ? obrigatoria / grad : null, grad_eletiva: grad ? eletiva / grad : null,
+      total_262, delta_262: total_262 == null ? null : total - total_262,
+    };
+  }),
 });
 
-// Construir interface
-function initTabs() {
-  document.getElementById('tab-docentes').addEventListener('click', function() {
-    showTab('docentes');
-  });
-  document.getElementById('tab-disciplinas').addEventListener('click', function() {
-    showTab('disciplinas');
-  });
-}
+dash.calc('departamento', {
+  title: 'Resumo do departamento',
+  description: 'Conta os docentes que cumprem as duas regras e soma a CH total de 2027.1.',
+  inputs: ['resumo'],
+  fn: (resumo) => [{
+    docentes: resumo.length,
+    cumprem: resumo.filter((r) => r.situacao === 'Cumpre').length,
+    abaixo: resumo.filter((r) => r.situacao !== 'Cumpre').length,
+    ch_total: resumo.reduce((a, r) => a + r.total, 0),
+  }],
+});
 
-function showTab(tabName) {
-  var tabs = document.querySelectorAll('.cz-view');
-  var buttons = document.querySelectorAll('[role="tab"]');
+dash.calc('por_curso', {
+  title: 'Horas por curso',
+  description: 'Soma a CH 2027.1 de cada docente por curso ou programa, separando obrigatória, eletiva e pós.',
+  inputs: ['ch_2027_1'],
+  fn: (ch_2027_1) => {
+    const out = new Map();
+    for (const r of ch_2027_1) {
+      const k = r.docente + '|' + r.curso;
+      if (!out.has(k)) out.set(k, { docente: r.docente, curso: r.curso, ch: 0, obrigatoria: 0, eletiva: 0, pos: 0, orientacao: 0 });
+      const o = out.get(k); const h = Number(r.ch);
+      o.ch += h;
+      if (r.tipo === 'Obrigatória') o.obrigatoria += h;
+      else if (r.tipo === 'Eletiva') o.eletiva += h;
+      else if (r.tipo === 'Pós-graduação') o.pos += h;
+      else o.orientacao += h;
+    }
+    return [...out.values()];
+  },
+});
 
-  tabs.forEach(function(tab) { tab.classList.remove('active'); });
-  buttons.forEach(function(btn) { btn.setAttribute('aria-selected', 'false'); });
+dash.calc('por_disciplina', {
+  title: 'Resumo por disciplina',
+  description: 'Soma a CH 2027.1 de cada disciplina e a parte de cada docente nela.',
+  inputs: ['ch_2027_1'],
+  fn: (ch_2027_1) => {
+    const out = new Map();
+    for (const r of ch_2027_1) {
+      if (!out.has(r.disciplina)) out.set(r.disciplina, { disciplina: r.disciplina, tipo: r.tipo, cursos: [], ch: 0, docentes: [] });
+      const o = out.get(r.disciplina); const h = Number(r.ch);
+      o.ch += h;
+      if (!o.cursos.includes(r.curso)) o.cursos.push(r.curso);
+      o.docentes.push({ docente: r.docente, ch: h });
+    }
+    return [...out.values()].map((o) => {
+      o.docentes.sort((a, b) => b.ch - a.ch || a.docente.localeCompare(b.docente, 'pt'));
+      o.docentes.forEach((d) => { d.pct = o.ch ? d.ch / o.ch : 0; });
+      return { ...o, curso: o.cursos.join(', '), n_docentes: o.docentes.length };
+    });
+  },
+});
 
-  if (tabName === 'docentes') {
-    document.getElementById('docentes-view').classList.add('active');
-    document.getElementById('tab-docentes').setAttribute('aria-selected', 'true');
-  } else {
-    document.getElementById('disciplinas-view').classList.add('active');
-    document.getElementById('tab-disciplinas').setAttribute('aria-selected', 'true');
-    renderDisciplinas();
-  }
-}
+(() => {
+  const root = document.getElementById('cz');
+  const $ = (id) => document.getElementById(id);
+  const enc = (s) => String(s).replace(/%/g, '%25').replace(/&/g, '%26').replace(/=/g, '%3D');
+  const fmtPct = d3.format('.0%');
+  const sgn = (n) => (n > 0 ? '+' : n < 0 ? '-' : '') + Math.abs(n);
+  const signed = (n) => sgn(n) + ' h';
+  const TIPOS = [
+    { key: 'obrigatoria', label: 'Obrigatórias', color: 'var(--c-obr)' },
+    { key: 'eletiva', label: 'Eletivas', color: 'var(--c-ele)' },
+    { key: 'pos', label: 'Pós-graduação', color: 'var(--c-pos)' },
+    { key: 'orientacao', label: 'Orientações', color: 'var(--c-ori)' },
+  ];
+  const TIPO_COR = { 'Obrigatória': 'var(--c-obr)', 'Eletiva': 'var(--c-ele)', 'Pós-graduação': 'var(--c-pos)', 'Orientação': 'var(--c-ori)' };
+  const ORDEM_CURSO = ['Bacharelado', 'Licenciatura', 'Ambientais', 'Biomedicina', 'Botânica (interdepartamental)', 'PPGBA', 'PRODEMA', 'Proficiamb', 'ProfBio (CAV)'];
+  let filtro = 'todos';
+  let drawnFor = null;
 
-function renderDisciplinas() {
-  var grid = document.getElementById('disc-grid');
-  grid.innerHTML = '';
+  const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+  const mark = (e, src, field, where) => { e.setAttribute('data-source', src); if (field) e.setAttribute('data-field', field); if (where) e.setAttribute('data-where', where); return e; };
 
-  var discList = Object.values(disciplinas).sort(function(a, b) {
-    return a.nome.localeCompare(b.nome);
-  });
+  // tooltip
+  const tip = $('tip');
+  const showTip = (ev, title, line) => {
+    tip.replaceChildren(el('div', 't', title), el('div', null, line));
+    const b = root.getBoundingClientRect();
+    tip.style.opacity = 1;
+    let x = ev.clientX - b.left + 12, y = ev.clientY - b.top + 12;
+    const w = tip.offsetWidth;
+    if (x + w > b.width) x = Math.max(0, ev.clientX - b.left - w - 12);
+    tip.style.left = x + 'px'; tip.style.top = y + 'px';
+  };
+  const hideTip = () => { tip.style.opacity = 0; };
 
-  discList.forEach(function(disc) {
-    var card = document.createElement('button');
-    card.className = 'cz-card';
+  // stacked bar (HTML) with minimum marker
+  const stacked = (parts, scaleMax, min, minLabel, big, whereDoc) => {
+    const tr = el('div', 'cz-track' + (big ? ' lg' : ''));
+    const fill = el('div', 'cz-fill');
+    const tot = parts.reduce((a, p) => a + p.v, 0);
+    fill.style.width = Math.min(100, (tot / scaleMax) * 100) + '%';
+    for (const p of parts) {
+      if (!p.v) continue;
+      const i = el('i'); i.style.width = (p.v / tot) * 100 + '%'; i.style.background = p.color;
+      if (whereDoc) mark(i, p.src || 'resumo', p.key, whereDoc);
+      i.addEventListener('mousemove', (ev) => showTip(ev, p.label, p.v + ' h'));
+      i.addEventListener('mouseleave', hideTip);
+      fill.append(i);
+    }
+    tr.append(fill);
+    if (min != null) {
+      const m = el('div', 'cz-mark'); m.style.left = `calc(${(min / scaleMax) * 100}% - 1px)`;
+      if (minLabel) m.append(el('span', null, minLabel));
+      tr.append(m);
+    }
+    return tr;
+  };
 
-    var tipoColor = disc.tipo === 'Obrigatória' ? '#4a90e2' : disc.tipo === 'Eletiva' ? '#f5a623' : '#9013fe';
-    var numProfs = disc.professores.length;
+  const VIEWS = ['departamento', 'docente', 'disc-lista', 'disc-detalhe'];
+  const show = (id) => {
+    for (const k of VIEWS) $(k).hidden = k !== id;
+    const v = $(id);
+    v.classList.remove('enter'); void v.offsetWidth; v.classList.add('enter');
+  };
 
-    card.innerHTML = '<div class="cz-card-top"><div><div class="cz-name">' + disc.nome + '</div><div class="cz-role">' + numProfs + ' professor' + (numProfs > 1 ? 'es' : '') + '</div></div></div><div class="cz-big">' + disc.ch_total + '<small>h</small></div>';
-    card.style.borderLeft = '4px solid ' + tipoColor;
+  // ---------- department view ----------
+  const drawDepartment = (rows) => {
+    const grid = $('grid');
+    const list = rows.filter((r) => filtro === 'todos' || r.situacao !== 'Cumpre')
+      .sort((a, b) => a.docente.localeCompare(b.docente, 'pt'));
+    const scaleMax = Math.max(...rows.map((r) => Math.max(r.total, r.min_total))) * 1.04;
+    grid.replaceChildren();
+    if (!list.length) { grid.append(el('p', 'cz-empty', 'Nenhum docente abaixo do mínimo.')); return; }
+    for (const r of list) {
+      const w = 'docente=' + enc(r.docente);
+      const card = el('button', 'cz-card'); card.type = 'button';
+      card.setAttribute('aria-label', `Abrir painel de ${r.docente}`);
+      const top = el('div', 'cz-card-top');
+      const who = el('div'); who.append(mark(el('div', 'cz-name', r.docente), 'resumo', 'docente', w), mark(el('div', 'cz-role', r.papel), 'resumo', 'papel', w));
+      const big = el('div', 'cz-big'); big.append(mark(el('span', null, String(r.total)), 'resumo', 'total', w), el('small', null, 'h'));
+      top.append(who, big);
+      const bar = stacked(TIPOS.map((t) => ({ ...t, v: r[t.key] })), scaleMax, r.min_total, null, false, w);
+      const st = el('div', 'cz-status');
+      const ok = r.situacao === 'Cumpre';
+      st.append(el('i', 'cz-dot ' + (ok ? 'ok' : 'bad')));
+      if (ok) st.append(el('span', 'ok', 'Cumpre as duas regras'));
+      else {
+        const msgs = [];
+        if (r.saldo_obr < 0) msgs.push(`obrigatórias ${signed(r.saldo_obr)}`);
+        if (r.saldo_total < 0) msgs.push(`total ${signed(r.saldo_total)}`);
+        st.append(el('span', 'bad', 'Abaixo: ' + msgs.join(' · ')));
+      }
+      card.append(top, bar, st);
+      card.addEventListener('click', () => { dash.setParams({ docente: r.docente }); });
+      grid.append(card);
+    }
+  };
 
-    card.addEventListener('click', function() {
-      showDisciplineDetail(disc);
+  // ---------- docente view ----------
+  const drawDocente = (r, itens, cursos) => {
+    const w = 'docente=' + enc(r.docente);
+    mark($('p-nome'), 'resumo', 'docente', w).textContent = r.docente;
+    mark($('p-papel'), 'resumo', 'papel', w).textContent = r.papel + ' · Departamento de Zoologia';
+    const ok = r.situacao === 'Cumpre';
+    const chip = $('p-chip'); chip.className = 'cz-chip ' + (ok ? 'ok' : 'bad');
+    const sit = el('span'); sit.append(mark(el('span', null, r.situacao), 'resumo', 'situacao', w), ok ? ' as duas regras' : '');
+    chip.replaceChildren(el('i', 'cz-dot ' + (ok ? 'ok' : 'bad')), sit);
+    const prev = $('p-prev'); prev.replaceChildren();
+    if (r.total_262 != null) {
+      prev.append('2026.2: ', mark(el('b', null, String(r.total_262)), 'resumo', 'total_262', w), ' h · variação ', mark(el('b', null, sgn(r.delta_262)), 'resumo', 'delta_262', w), ' h');
+    } else prev.append('Sem carga em 2026.2');
+
+    // rules
+    const scaleMax = Math.max(r.total, r.min_total) * 1.12;
+    const rule = (box, label, sub, value, field, min, minField, saldo, saldoField, parts) => {
+      box.replaceChildren();
+      const topRow = el('div', 'cz-rule-top');
+      const l = el('div', 'cz-rule-l', label); l.append(el('small', null, sub));
+      const v = el('div', 'cz-rule-v');
+      v.append(mark(el('span', 'n', String(value)), 'resumo', field, w), el('span', 'of', ' h · mínimo '), mark(el('span', 'of', String(min)), 'resumo', minField, w), el('span', 'of', ' h'));
+      const s = el('span', 'cz-rule-s ' + (saldo >= 0 ? 'ok' : 'bad'));
+      s.append(saldo >= 0 ? '✓ ' : '✕ ', mark(el('span', null, sgn(saldo)), 'resumo', saldoField, w), ' h');
+      v.append(s);
+      topRow.append(l, v);
+      box.append(topRow, stacked(parts, scaleMax, min, `mín. ${min} h`, true, w));
+    };
+    rule($('r-obr'), 'Disciplinas obrigatórias', `Mínimo de 50% do total exigido (${r.min_obr} h)`, r.obrigatoria, 'obrigatoria', r.min_obr, 'min_obr', r.saldo_obr, 'saldo_obr',
+      [{ ...TIPOS[0], v: r.obrigatoria }]);
+    rule($('r-tot'), 'Carga horária total', `Graduação + pós-graduação`, r.total, 'total', r.min_total, 'min_total', r.saldo_total, 'saldo_total',
+      TIPOS.map((t) => ({ ...t, v: r[t.key] })));
+
+    // donut
+    const box = $('donut'); box.replaceChildren();
+    const size = 168, rad = size / 2, inner = rad - 22;
+    const parts = TIPOS.map((t) => ({ ...t, v: r[t.key] })).filter((p) => p.v > 0);
+    const svg = d3.select(box).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${size} ${size}`).attr('role', 'img').attr('aria-label', 'Divisão da carga por tipo');
+    const g = svg.append('g').attr('transform', `translate(${rad},${rad})`);
+    g.append('circle').attr('r', (rad + inner) / 2).attr('fill', 'none').attr('stroke', 'var(--cds-chart-grid)').attr('stroke-width', rad - inner);
+    const arcs = d3.pie().sort(null).value((p) => p.v).padAngle(parts.length > 1 ? 0.025 : 0)(parts);
+    g.selectAll('path').data(arcs).join('path')
+      .attr('d', d3.arc().innerRadius(inner).outerRadius(rad).cornerRadius(3))
+      .attr('fill', (a) => a.data.color)
+      .on('mousemove', (ev, a) => showTip(ev, a.data.label, `${a.data.v} h · ${fmtPct(a.data.v / r.total)}`))
+      .on('mouseleave', hideTip);
+    const c = el('div', 'cz-donut-c');
+    c.append(mark(el('div', 'n', String(r.total)), 'resumo', 'total', w), el('div', 'l', 'horas no total'));
+    box.append(c);
+    const comp = $('comp'); comp.replaceChildren();
+    for (const t of TIPOS) {
+      if (t.key === 'orientacao' && !r.orientacao) continue;
+      const row = el('div', 'cz-comp-row' + (r[t.key] ? '' : ' zero'));
+      const sw = el('i', 'cz-sw'); sw.style.background = t.color;
+      row.append(sw, el('span', null, t.label), (() => { const h = el('span', 'h'); h.append(mark(el('span', null, String(r[t.key])), 'resumo', t.key, w), ' h'); return h; })(), mark(el('span', 'p', fmtPct(r['pct_' + t.key])), 'resumo', 'pct_' + t.key, w));
+      comp.append(row);
+    }
+    const gs = $('gradsplit'); gs.replaceChildren();
+    if (r.grad_obrigatoria != null) {
+      gs.append('Na graduação: ', mark(el('b', null, fmtPct(r.grad_obrigatoria)), 'resumo', 'grad_obrigatoria', w), ' em obrigatórias e ', mark(el('b', null, fmtPct(r.grad_eletiva)), 'resumo', 'grad_eletiva', w), ' em eletivas.');
+    } else gs.append('Sem carga na graduação neste semestre.');
+
+    // cursos
+    const cb = $('cursos-bars'); cb.replaceChildren();
+    const mine = cursos.filter((x) => x.docente === r.docente)
+      .sort((a, b) => { const ix = (c) => { const i = ORDEM_CURSO.indexOf(c); return i < 0 ? 99 : i; }; return ix(a.curso) - ix(b.curso) || b.ch - a.ch; });
+    const cmax = Math.max(1, ...mine.map((x) => x.ch));
+    for (const x of mine) {
+      const cw = 'docente=' + enc(x.docente) + '&curso=' + enc(x.curso);
+      const row = el('div', 'cz-curso');
+      row.append(mark(el('span', 'lab', x.curso), 'por_curso', 'curso', cw));
+      const pts = TIPOS.map((t) => ({ ...t, v: x[t.key], src: 'por_curso' }));
+      row.append(stacked(pts, cmax, null, null, false, cw));
+      const vv = el('span', 'v'); vv.append(mark(el('span', null, String(x.ch)), 'por_curso', 'ch', cw), ' h'); row.append(vv);
+      cb.append(row);
+    }
+    if (!mine.length) cb.append(el('p', 'cz-empty', 'Sem carga registrada.'));
+
+    // regras (texto)
+    const rt = $('rules-txt'); rt.replaceChildren();
+    const r1 = el('div'); r1.append(el('b', null, 'Mínimo total'));
+    const p1 = el('p'); p1.append(mark(el('span', null, String(r.min_total)), 'resumo', 'min_total', w), r.min_total < 120 ? ' h no semestre, já reduzido à metade por cargo ou redução legal (padrão: 120 h).' : ' h no semestre. Quem tem redução por cargo (chefia, coordenação) ou redução legal cumpre a metade: 60 h.');
+    r1.append(p1);
+    const r2 = el('div'); r2.append(el('b', null, 'Mínimo em obrigatórias'));
+    const p2 = el('p'); p2.append(mark(el('span', null, String(r.min_obr)), 'resumo', 'min_obr', w), ' h, metade do mínimo total, sempre em disciplinas obrigatórias da graduação. TCC e estágios dos cursos contam como obrigatória.');
+    r2.append(p2);
+    rt.append(r1, r2);
+
+    // tabela
+    const tb = $('tabela').querySelector('tbody'); tb.replaceChildren();
+    const ord = { 'Obrigatória': 0, 'Eletiva': 1, 'Orientação': 2, 'Pós-graduação': 3 };
+    const mineItens = itens.filter((i) => i.docente === r.docente).sort((a, b) => ord[a.tipo] - ord[b.tipo] || b.ch - a.ch);
+    for (const i of mineItens) {
+      const tr = el('tr'); tr.setAttribute('data-key', i.id);
+      const td1 = el('td', 'disc'); td1.append(el('div', null, i.disciplina));
+      if (i.obs) td1.append(el('div', 'cz-warn', '⚠ ' + i.obs));
+      const td2 = el('td', 'col-curso', i.curso);
+      const td3 = el('td'); const pill = el('span', 'cz-pill'); const sw = el('i', 'cz-sw'); sw.style.background = TIPO_COR[i.tipo] || 'var(--cds-chart-muted)'; pill.append(sw, i.tipo); td3.append(pill);
+      const td4 = el('td', 'num', String(i.ch));
+      tr.append(td1, td2, td3, td4);
+      tb.append(tr);
+    }
+    $('disc-note').textContent = `${mineItens.length} ${mineItens.length === 1 ? 'item' : 'itens'} com carga neste semestre.`;
+  };
+
+  // ---------- disciplinas ----------
+  const PAL = Array.from({ length: 14 }, (_, i) => `var(--p${i + 1})`);
+  const corDoc = (i) => PAL[i % PAL.length];
+  let dfiltro = 'todas';
+  const abrirDocente = (nome) => dash.setParams({ view: null, disciplina: null, docente: nome });
+
+  const splitBar = (r, big, scaleMax) => {
+    const tr = el('div', 'cz-track' + (big ? ' lg' : ''));
+    const fill = el('div', 'cz-fill split');
+    fill.style.width = (scaleMax ? Math.min(100, (r.ch / scaleMax) * 100) : 100) + '%';
+    r.docentes.forEach((d, i) => {
+      const seg = el('i'); seg.style.width = d.pct * 100 + '%'; seg.style.background = corDoc(i);
+      seg.addEventListener('mousemove', (ev) => showTip(ev, d.docente, `${d.ch} h · ${fmtPct(d.pct)}`));
+      seg.addEventListener('mouseleave', hideTip);
+      fill.append(seg);
+    });
+    tr.append(fill);
+    return tr;
+  };
+
+  const tipoPill = (tipo) => { const p = el('span', 'cz-pill'); const sw = el('i', 'cz-sw'); sw.style.background = TIPO_COR[tipo] || 'var(--cds-chart-muted)'; p.append(sw, tipo); return p; };
+
+  const drawDiscLista = (rows) => {
+    const comp = rows.filter((r) => r.n_docentes > 1).length;
+    $('dt-total').textContent = $('dt-total2').textContent = String(rows.length);
+    $('dt-comp').textContent = $('dt-comp2').textContent = String(comp);
+    $('dt-unico').textContent = String(rows.length - comp);
+    $('dt-ch').textContent = String(rows.reduce((a, r) => a + r.ch, 0));
+    const grid = $('disc-grid');
+    const list = rows.filter((r) => dfiltro === 'todas' || (dfiltro === 'comp' ? r.n_docentes > 1 : r.n_docentes === 1))
+      .sort((a, b) => a.disciplina.localeCompare(b.disciplina, 'pt'));
+    grid.replaceChildren();
+    for (const r of list) {
+      const card = el('button', 'cz-card'); card.type = 'button';
+      card.setAttribute('aria-label', `Abrir painel de ${r.disciplina}`);
+      const top = el('div', 'cz-card-top');
+      const who = el('div');
+      const meta = el('div', 'cz-meta'); meta.append(tipoPill(r.tipo), el('span', null, r.curso));
+      who.append(el('div', 'cz-name', r.disciplina), meta);
+      const big = el('div', 'cz-big'); big.append(el('span', null, String(r.ch)), el('small', null, 'h'));
+      top.append(who, big);
+      const st = el('div', 'cz-status');
+      const sws = el('span', 'cz-swatches');
+      r.docentes.slice(0, 8).forEach((d, i) => { const s = el('i'); s.style.background = corDoc(i); sws.append(s); });
+      st.append(sws, el('span', null, r.n_docentes > 1 ? `Compartilhada por ${r.n_docentes} docentes` : `Docente único: ${r.docentes[0].docente}`));
+      card.append(top, splitBar(r, false), st);
+      card.addEventListener('click', () => dash.setParams({ view: 'disciplinas', disciplina: r.disciplina, docente: null }));
+      grid.append(card);
+    }
+    if (!list.length) grid.append(el('p', 'cz-empty', 'Nenhuma disciplina neste filtro.'));
+  };
+
+  const drawDiscDetalhe = (r, resumo) => {
+    $('x-nome').textContent = r.disciplina;
+    $('x-tipo').textContent = `${r.tipo} · ${r.curso}`;
+    const chip = $('x-chip'); chip.className = 'cz-chip';
+    const sws = el('span', 'cz-swatches');
+    r.docentes.slice(0, 8).forEach((d, i) => { const s = el('i'); s.style.background = corDoc(i); sws.append(s); });
+    chip.replaceChildren(sws, el('span', null, r.n_docentes > 1 ? `Compartilhada por ${r.n_docentes} docentes` : 'Ministrada por um docente'));
+    const prev = $('x-prev'); prev.replaceChildren(el('b', null, String(r.ch)), ' h no semestre');
+
+    // donut
+    const box = $('x-donut'); box.replaceChildren();
+    const size = 168, rad = size / 2, inner = rad - 22;
+    const parts = r.docentes.map((d, i) => ({ ...d, color: corDoc(i) }));
+    const svg = d3.select(box).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${size} ${size}`).attr('role', 'img').attr('aria-label', 'Divisão da carga por docente');
+    const g = svg.append('g').attr('transform', `translate(${rad},${rad})`);
+    g.append('circle').attr('r', (rad + inner) / 2).attr('fill', 'none').attr('stroke', 'var(--cds-chart-grid)').attr('stroke-width', rad - inner);
+    const arcs = d3.pie().sort(null).value((p) => p.ch).padAngle(parts.length > 1 ? 0.025 : 0)(parts);
+    g.selectAll('path').data(arcs).join('path')
+      .attr('d', d3.arc().innerRadius(inner).outerRadius(rad).cornerRadius(3))
+      .attr('fill', (a) => a.data.color)
+      .on('mousemove', (ev, a) => showTip(ev, a.data.docente, `${a.data.ch} h · ${fmtPct(a.data.pct)}`))
+      .on('mouseleave', hideTip);
+    const c = el('div', 'cz-donut-c');
+    c.append(el('div', 'n', String(r.ch)), el('div', 'l', 'horas no total'));
+    box.append(c);
+    const comp = $('x-comp'); comp.replaceChildren();
+    for (const p of parts) {
+      const row = el('div', 'cz-comp-row');
+      const sw = el('i', 'cz-sw'); sw.style.background = p.color;
+      row.append(sw, el('span', null, p.docente), el('span', 'h', `${p.ch} h`), el('span', 'p', fmtPct(p.pct)));
+      comp.append(row);
+    }
+
+    // barras
+    $('x-total-bar').replaceChildren(splitBar(r, true));
+    const share = $('x-share'); share.replaceChildren();
+    const maxCh = Math.max(1, ...r.docentes.map((d) => d.ch));
+    r.docentes.forEach((d, i) => {
+      const row = el('div', 'cz-share-row');
+      const sw = el('i', 'cz-sw'); sw.style.background = corDoc(i);
+      const nome = el('button', 'cz-link', d.docente); nome.type = 'button';
+      nome.addEventListener('click', () => abrirDocente(d.docente));
+      const tr = el('div', 'cz-track'); const fill = el('div', 'cz-fill'); fill.style.width = (d.ch / maxCh) * 100 + '%';
+      const seg = el('i'); seg.style.width = '100%'; seg.style.background = corDoc(i);
+      seg.addEventListener('mousemove', (ev) => showTip(ev, d.docente, `${d.ch} h · ${fmtPct(d.pct)}`));
+      seg.addEventListener('mouseleave', hideTip);
+      fill.append(seg); tr.append(fill);
+      row.append(sw, nome, tr, el('span', 'h', `${d.ch} h`), el('span', 'p', fmtPct(d.pct)));
+      share.append(row);
     });
 
-    grid.appendChild(card);
+    // tabela
+    const tb = $('x-tabela').querySelector('tbody'); tb.replaceChildren();
+    r.docentes.forEach((d, i) => {
+      const s = resumo.find((x) => x.docente === d.docente);
+      const tr = el('tr', 'click');
+      const td1 = el('td'); const pill = el('span', 'cz-pill'); const sw = el('i', 'cz-sw'); sw.style.background = corDoc(i); pill.append(sw, d.docente); td1.append(pill);
+      const ok = s && s.situacao === 'Cumpre';
+      const td6 = el('td'); const st = el('span', 'cz-status');
+      st.append(el('i', 'cz-dot ' + (ok ? 'ok' : 'bad')), el('span', ok ? 'ok' : 'bad', s ? s.situacao : '—'));
+      td6.append(st);
+      tr.append(td1, el('td', 'col-curso', s ? s.papel : '—'), el('td', 'num', String(d.ch)), el('td', 'num', fmtPct(d.pct)), el('td', 'num', s ? String(s.total) : '—'), td6);
+      tr.addEventListener('click', () => abrirDocente(d.docente));
+      tb.append(tr);
+    });
+  };
+
+  document.querySelectorAll('#disc-lista .cz-seg button').forEach((b) => b.addEventListener('click', () => {
+    dfiltro = b.dataset.dfiltro;
+    document.querySelectorAll('#disc-lista .cz-seg button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    drawDiscLista(dash.data('por_disciplina').data);
+  }));
+  $('voltar-disc').addEventListener('click', () => dash.setParams({ view: 'disciplinas', disciplina: null, docente: null }));
+  document.querySelectorAll('.cz-tabs button').forEach((b) => b.addEventListener('click', () => {
+    dash.setParams(b.dataset.aba === 'disciplinas' ? { view: 'disciplinas', disciplina: null, docente: null } : { view: null, disciplina: null, docente: null });
+  }));
+
+  // controls
+  document.querySelectorAll('#departamento .cz-seg button').forEach((b) => b.addEventListener('click', () => {
+    filtro = b.dataset.filtro;
+    document.querySelectorAll('#departamento .cz-seg button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    const res = dash.data('resumo'); if (res.status === 'ok') drawDepartment(res.data);
+  }));
+  $('voltar').addEventListener('click', () => dash.setParams({ docente: null }));
+
+  dash.onData(() => {
+    root.style.setProperty('--c-obr', dash.colors[0]);
+    root.style.setProperty('--c-ele', dash.colors[1]);
+    root.style.setProperty('--c-pos', dash.colors[2]);
+    root.style.setProperty('--c-ori', dash.colors[3]);
+    const res = dash.data('resumo'), dep = dash.data('departamento'), itens = dash.data('ch_2027_1'), cur = dash.data('por_curso');
+    const ready = [res, dep, itens, cur].every((x) => x.status === 'ok');
+    document.querySelectorAll('.cz .dash-skeleton').forEach((e) => { if (ready || [res, dep].some((x) => x.status === 'error')) e.classList.remove('dash-skeleton'); });
+    if (dep.status === 'ok') {
+      const d = dep.data[0];
+      document.querySelectorAll('[data-source="departamento"]').forEach((e) => { e.textContent = String(d[e.dataset.field]); });
+    }
+    if (!ready) return void ($('grid').replaceChildren());
+    const prm = dash.params();
+    const aba = prm.view === 'disciplinas' ? 'disciplinas' : 'docentes';
+    document.querySelectorAll('.cz-tabs button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.aba === aba)));
+    if (aba === 'disciplinas') {
+      const pd = dash.data('por_disciplina').data;
+      const x = prm.disciplina ? pd.find((d) => d.disciplina === prm.disciplina) : null;
+      if (x) {
+        if (drawnFor !== 'x:' + x.disciplina) { show('disc-detalhe'); drawnFor = 'x:' + x.disciplina; window.scrollTo?.({ top: 0 }); }
+        drawDiscDetalhe(x, res.data);
+      } else {
+        if (drawnFor !== 'xl') { show('disc-lista'); drawnFor = 'xl'; }
+        drawDiscLista(pd);
+      }
+      return;
+    }
+    const doc = prm.docente;
+    const r = doc ? res.data.find((x) => x.docente === doc) : null;
+    if (r) {
+      if (drawnFor !== 'd:' + doc) { show('docente'); drawnFor = 'd:' + doc; dash.setLink('docente'); window.scrollTo?.({ top: 0 }); }
+      drawDocente(r, itens.data, cur.data);
+    } else {
+      if (drawnFor !== 'dep') { show('departamento'); drawnFor = 'dep'; dash.setLink('departamento'); }
+      drawDepartment(res.data);
+    }
   });
-}
-
-function showDisciplineDetail(disc) {
-  document.getElementById('disc-list-view').style.display = 'none';
-  document.getElementById('disc-detail-view').style.display = 'block';
-  document.getElementById('voltar-disc').style.display = 'inline-flex';
-
-  document.getElementById('d-nome').textContent = disc.nome;
-  document.getElementById('d-tipo').textContent = disc.tipo + ' · ' + disc.curso;
-  document.getElementById('d-ch').textContent = disc.ch_total + 'h';
-
-  var profsDiv = document.getElementById('d-profs');
-  profsDiv.innerHTML = '';
-
-  disc.professores.forEach(function(p) {
-    var row = document.createElement('div');
-    row.className = 'cz-prof-row';
-
-    var pct = Math.round((p.ch / disc.ch_total) * 100);
-
-    row.innerHTML = '<div class="cz-prof-name">' + p.docente + '</div><div class="cz-prof-bar"><div class="cz-track" style="flex:1"><div class="cz-fill" style="width:' + pct + '%"><i style="background:var(--c1)"></i></div></div><div class="cz-prof-ch">' + p.ch + 'h (' + pct + '%)</div></div>';
-
-    profsDiv.appendChild(row);
-  });
-}
-
-document.getElementById('voltar-disc').addEventListener('click', function() {
-  document.getElementById('disc-list-view').style.display = 'block';
-  document.getElementById('disc-detail-view').style.display = 'none';
-  document.getElementById('voltar-disc').style.display = 'none';
-});
-
-// Inicializar
-initTabs();
+})();
 </script>
+
+<footer class="site-foot">Departamento de Zoologia · Centro de Biociências · UFPE · Dados da aba “Planejamento CH 2027.1”, atualizados em 23/10/2026.</footer>
 </div>
 </body>
 </html>
