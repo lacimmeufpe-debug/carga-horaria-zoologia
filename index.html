@@ -186,6 +186,9 @@ body { margin: 0; background: var(--color-bg); color: var(--color-fg); font-fami
 .cz-share-row .p { font-variant-numeric: tabular-nums; color: var(--color-fg-muted); font-size: var(--cds-font-size-caption); text-align: right; }
 .cz-link { all: unset; cursor: pointer; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-decoration: underline; text-decoration-color: var(--color-border-line); text-underline-offset: 3px; }
 .cz-link:hover { text-decoration-color: var(--color-fg-muted); }
+.cz-group { grid-column: 1 / -1; margin: var(--cds-gap-md) 0 0; padding-bottom: var(--cds-gap-xs); border-bottom: 1px solid var(--color-border-line); font-size: var(--cds-font-size-caption); font-weight: var(--cds-font-weight-medium); letter-spacing: .06em; text-transform: uppercase; color: var(--color-fg-muted); }
+.cz-group:first-child { margin-top: 0; }
+.cz-group span { font-weight: 400; }
 .cz-table tr.click { cursor: pointer; }
 .cz-table tr.click:hover td { background: var(--cds-chart-grid); }
 @media (max-width: 34rem) {
@@ -220,7 +223,7 @@ body { margin: 0; background: var(--color-bg); color: var(--color-fg); font-fami
     </header>
 
     <div class="cz-tiles" id="tiles">
-      <div class="cz-tile"><div class="cz-tile-l">Docentes no semestre</div><div class="cz-tile-v dash-skeleton" data-source="departamento" data-field="docentes">—</div><div class="cz-tile-n">efetivos, substitutos e pós-docs</div></div>
+      <div class="cz-tile"><div class="cz-tile-l">Docentes no semestre</div><div class="cz-tile-v dash-skeleton" data-source="departamento" data-field="docentes">—</div><div class="cz-tile-n">permanentes, visitante, substitutos e pós-docs</div></div>
       <div class="cz-tile"><div class="cz-tile-l">Cumprem as duas regras</div><div class="cz-tile-v ok dash-skeleton" data-source="departamento" data-field="cumprem">—</div><div class="cz-tile-n">mínimo em obrigatórias e mínimo total</div></div>
       <div class="cz-tile"><div class="cz-tile-l">Abaixo de algum mínimo</div><div class="cz-tile-v bad dash-skeleton" data-source="departamento" data-field="abaixo">—</div><div class="cz-tile-n">ver docentes em vermelho</div></div>
       <div class="cz-tile"><div class="cz-tile-l">CH total do departamento</div><div class="cz-tile-v dash-skeleton" data-source="departamento" data-field="ch_total">—</div><div class="cz-tile-n">horas em 2027.1, graduação + pós</div></div>
@@ -228,6 +231,13 @@ body { margin: 0; background: var(--color-bg); color: var(--color-fg); font-fami
 
     <div class="cz-bar-row">
       <h2 class="cz-h3" id="lista-docentes">Docentes</h2>
+      <div class="cz-seg" role="group" aria-label="Filtrar por vínculo">
+        <button type="button" data-vinculo="todos" aria-pressed="true">Todos</button>
+        <button type="button" data-vinculo="permanente" aria-pressed="false">Permanente</button>
+        <button type="button" data-vinculo="visitante" aria-pressed="false">Visitante</button>
+        <button type="button" data-vinculo="substituto" aria-pressed="false">Substitutos</button>
+        <button type="button" data-vinculo="posdoc" aria-pressed="false">Pós-docs</button>
+      </div>
       <div class="cz-seg" role="group" aria-label="Filtrar docentes">
         <button type="button" data-filtro="todos" aria-pressed="true">Todos</button>
         <button type="button" data-filtro="abaixo" aria-pressed="false">Abaixo do mínimo</button>
@@ -427,6 +437,14 @@ window.__CZ_DATA = {"ch_2027_1": [{"id": "Nídia Marinho · ZO408 Ecologia de Pr
 })();
 </script>
 <script>
+const VISITANTES = ['Bárbara Moraes'];
+const VINCULOS = [
+  { key: 'permanente', label: 'Corpo permanente', filtro: 'Permanente' },
+  { key: 'visitante', label: 'Professor visitante', filtro: 'Visitante' },
+  { key: 'substituto', label: 'Professores substitutos', filtro: 'Substitutos' },
+  { key: 'posdoc', label: 'Pós-docs', filtro: 'Pós-docs' },
+];
+
 dash.calc('resumo', {
   title: 'Resumo por docente',
   description: 'Soma a CH 2027.1 de cada docente por tipo, compara com os mínimos do docente e com o total de 2026.2.',
@@ -443,8 +461,12 @@ dash.calc('resumo', {
     const min_obr = Number(d.min_obr);
     const min_total = Number(d.min_total);
     const total_262 = d.total_262 == null ? null : Number(d.total_262);
+    const vinculo = VISITANTES.includes(d.docente) ? 'visitante'
+      : d.papel === 'Prof. substituto' ? 'substituto'
+      : d.papel === 'Pós-doc' ? 'posdoc' : 'permanente';
+    const papel = vinculo === 'visitante' && d.papel === 'Docente' ? 'Prof. visitante' : d.papel;
     return {
-      docente: d.docente, papel: d.papel, obrigatoria, eletiva, pos, orientacao, total,
+      docente: d.docente, papel, vinculo, obrigatoria, eletiva, pos, orientacao, total,
       min_obr, min_total, saldo_obr: obrigatoria - min_obr, saldo_total: total - min_total,
       situacao: obrigatoria >= min_obr && total >= min_total ? 'Cumpre' : 'Abaixo do mínimo',
       pct_obrigatoria: total ? obrigatoria / total : 0, pct_eletiva: total ? eletiva / total : 0,
@@ -524,6 +546,7 @@ dash.calc('por_disciplina', {
   const TIPO_COR = { 'Obrigatória': 'var(--c-obr)', 'Eletiva': 'var(--c-ele)', 'Pós-graduação': 'var(--c-pos)', 'Orientação': 'var(--c-ori)' };
   const ORDEM_CURSO = ['Bacharelado', 'Licenciatura', 'Ambientais', 'Biomedicina', 'Botânica (interdepartamental)', 'PPGBA', 'PRODEMA', 'Proficiamb', 'ProfBio (CAV)'];
   let filtro = 'todos';
+  let vfiltro = 'todos';
   let drawnFor = null;
 
   const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
@@ -575,12 +598,20 @@ dash.calc('por_disciplina', {
   // ---------- department view ----------
   const drawDepartment = (rows) => {
     const grid = $('grid');
-    const list = rows.filter((r) => filtro === 'todos' || r.situacao !== 'Cumpre')
+    const list = rows.filter((r) => (filtro === 'todos' || r.situacao !== 'Cumpre') && (vfiltro === 'todos' || r.vinculo === vfiltro))
       .sort((a, b) => a.docente.localeCompare(b.docente, 'pt'));
     const scaleMax = Math.max(...rows.map((r) => Math.max(r.total, r.min_total))) * 1.04;
     grid.replaceChildren();
-    if (!list.length) { grid.append(el('p', 'cz-empty', 'Nenhum docente abaixo do mínimo.')); return; }
-    for (const r of list) {
+    if (!list.length) { grid.append(el('p', 'cz-empty', 'Nenhum docente neste filtro.')); return; }
+    const ordenada = VINCULOS.flatMap((v) => list.filter((r) => r.vinculo === v.key));
+    let grupo = null;
+    for (const r of ordenada) {
+      if (r.vinculo !== grupo) {
+        grupo = r.vinculo;
+        const n = list.filter((x) => x.vinculo === grupo).length;
+        const h = el('h3', 'cz-group'); h.append(VINCULOS.find((v) => v.key === grupo).label, el('span', null, ` · ${n}`));
+        grid.append(h);
+      }
       const w = 'docente=' + enc(r.docente);
       const card = el('button', 'cz-card'); card.type = 'button';
       card.setAttribute('aria-label', `Abrir painel de ${r.docente}`);
@@ -840,9 +871,14 @@ dash.calc('por_disciplina', {
   }));
 
   // controls
-  document.querySelectorAll('#departamento .cz-seg button').forEach((b) => b.addEventListener('click', () => {
+  document.querySelectorAll('#departamento .cz-seg button[data-vinculo]').forEach((b) => b.addEventListener('click', () => {
+    vfiltro = b.dataset.vinculo;
+    document.querySelectorAll('#departamento .cz-seg button[data-vinculo]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    const res = dash.data('resumo'); if (res.status === 'ok') drawDepartment(res.data);
+  }));
+  document.querySelectorAll('#departamento .cz-seg button[data-filtro]').forEach((b) => b.addEventListener('click', () => {
     filtro = b.dataset.filtro;
-    document.querySelectorAll('#departamento .cz-seg button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    document.querySelectorAll('#departamento .cz-seg button[data-filtro]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
     const res = dash.data('resumo'); if (res.status === 'ok') drawDepartment(res.data);
   }));
   $('voltar').addEventListener('click', () => dash.setParams({ docente: null }));
